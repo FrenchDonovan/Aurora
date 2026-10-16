@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus_version": "synthetic-unit-fixture-v1",
+  "domain": "SYNTHETIC tests, not source evidence or research results",
+  "papers": [
+    {"id":"synthetic-alpha","title":"Quantization accuracy experiments","authors":["Synthetic fixture"],"year":2026,"url":"https://example.invalid/alpha","license":{"status":"unknown"},"topics":["quantization","4 bit"],"curator_note":"SYNTHETIC NOT REAL SOURCE"},
+    {"id":"synthetic-beta","title":"Memory efficient attention","authors":["Synthetic fixture"],"year":2026,"url":"https://example.invalid/beta","license":{"status":"unknown"},"topics":["attention","memory"],"curator_note":"Secret curator query should never match: aardvark"},
+    {"id":"synthetic-gamma","title":"Quantization accuracy experiments","authors":["Synthetic fixture"],"year":2026,"url":"https://example.invalid/gamma","license":{"status":"unknown"},"topics":["quantization","4 bit"],"curator_note":"SYNTHETIC NOT REAL SOURCE"},
+    {"id":"synthetic-delta","title":"École ８ bit precision","authors":["Synthetic fixture"],"year":2026,"url":"https://example.invalid/delta","license":{"status":"unknown"},"topics":["unicode","precision"],"curator_note":"SYNTHETIC NOT REAL SOURCE"}
+  ],
+  "passages": [
+    {"id":"synthetic-p-a","paper_id":"synthetic-alpha","text":"Accuracy degradation was small for 4 bit weights in the tested configuration.","section":"Synthetic fixture","source_url":"https://example.invalid/alpha","text_kind":"verbatim_excerpt","curator_note":"SYNTHETIC fixture, not a source quote."},
+    {"id":"synthetic-p-b","paper_id":"synthetic-beta","text":"Exact attention reduces memory reads using tiling and avoids approximation.","section":"Synthetic fixture","source_url":"https://example.invalid/beta","text_kind":"verbatim_excerpt","curator_note":"SYNTHETIC fixture, not a source quote."},
+    {"id":"synthetic-p-c","paper_id":"synthetic-gamma","text":"Accuracy degradation was small for 4 bit weights in the tested configuration.","section":"Synthetic fixture","source_url":"https://example.invalid/gamma","text_kind":"verbatim_excerpt","curator_note":"SYNTHETIC fixture, not a source quote."},
+    {"id":"synthetic-p-d","paper_id":"synthetic-delta","text":"École precision uses 8 bit weights with café Unicode examples.","section":"Synthetic fixture","source_url":"https://example.invalid/delta","text_kind":"verbatim_excerpt","curator_note":"SYNTHETIC fixture, not a source quote."}
+  ],
+  "challenges":[{"id":"synthetic-case","question":"Can quantization preserve accuracy?","claim":"Quantization always has large accuracy degradation.","description":"SYNTHETIC development fixture","development_only":true,"relations":[{"passage_id":"synthetic-p-a","relation":"challenges","rationale":"Synthetic fixture relation, never scientific evidence."}]}]
+}

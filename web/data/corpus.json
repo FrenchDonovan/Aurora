@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "corpus_version": "seed-2026-10-16",
+  "domain": "Efficient and reliable language models",
+  "updated_at": "2026-10-16",
+  "provenance_note": "Eight individually source-checked abstracts. Each indexed item is a brief exact excerpt, sometimes a sentence fragment; original curator notes are separate. This is not full-paper indexing or an exhaustive literature review. Source checks were performed by an AI implementation agent, not independent human adjudication.",
+  "papers": [
+    {
+      "id": "paper-lora",
+      "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+      "authors": [
+        "Edward J. Hu",
+        "Yelong Shen",
+        "Phillip Wallis",
+        "Zeyuan Allen-Zhu",
+        "Yuanzhi Li",
+        "Shean Wang",
+        "Lu Wang",
+        "Weizhu Chen"
+      ],
+      "year": 2021,
+      "url": "https://arxiv.org/abs/2106.09685v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "unknown",
+        "id": null,
+        "source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+        "observed_label": "arXiv non-exclusive distribution; third-party reuse permission not established"
+      },
+      "topics": [
+        "parameter efficient adaptation",
+        "LoRA",
+        "low rank",
+        "fine tuning"
+      ],
+      "curator_note": "Studies adaptation using a small trainable parameterization with the original weights fixed. Its reported comparisons concern named architectures and downstream tasks; they do not guarantee equal performance for all adaptations."
+    },
+    {
+      "id": "paper-qlora",
+      "title": "QLoRA: Efficient Finetuning of Quantized LLMs",
+      "authors": [
+        "Tim Dettmers",
+        "Artidoro Pagnoni",
+        "Ari Holtzman",
+        "Luke Zettlemoyer"
+      ],
+      "year": 2023,
+      "url": "https://arxiv.org/abs/2305.14314v1",
+      "version": "v1",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "verified",
+        "id": "CC-BY-4.0",
+        "source_url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "topics": [
+        "quantization",
+        "QLoRA",
+        "4 bit",
+        "fine tuning",
+        "adapters"
+      ],
+      "curator_note": "Combines a compressed frozen base with trainable adapters. This addresses adaptation memory; it is not a statement that all four-bit inference or all quantizers preserve accuracy. The abstract's TeX-style adapter marker is retained in the exact excerpt."
+    },
+    {
+      "id": "paper-lost-middle",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts",
+      "authors": [
+        "Nelson F. Liu",
+        "Kevin Lin",
+        "John Hewitt",
+        "Ashwin Paranjape",
+        "Michele Bevilacqua",
+        "Fabio Petroni",
+        "Percy Liang"
+      ],
+      "year": 2023,
+      "url": "https://arxiv.org/abs/2307.03172v3",
+      "version": "v3",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "unknown",
+        "id": null,
+        "source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+        "observed_label": "arXiv non-exclusive distribution; third-party reuse permission not established"
+      },
+      "topics": [
+        "long context",
+        "evidence position",
+        "question answering",
+        "retrieval"
+      ],
+      "curator_note": "The experiments vary where useful material appears in multi-document answering and key-value lookup. A large input limit and effective use of every input location are different capabilities. Results describe the evaluated models and tasks."
+    },
+    {
+      "id": "paper-flashattention",
+      "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "authors": [
+        "Tri Dao",
+        "Daniel Y. Fu",
+        "Stefano Ermon",
+        "Atri Rudra",
+        "Christopher Ré"
+      ],
+      "year": 2022,
+      "url": "https://arxiv.org/abs/2205.14135v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "unknown",
+        "id": null,
+        "source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+        "observed_label": "arXiv non-exclusive distribution; third-party reuse permission not established"
+      },
+      "topics": [
+        "attention efficiency",
+        "GPU memory",
+        "exact attention",
+        "tiling",
+        "long context"
+      ],
+      "curator_note": "Reorganizes exact attention around GPU memory traffic. The abstract also discusses a separate sparse extension; exact attention and that approximate variant must not be conflated. Speed improvements are hardware and workload dependent."
+    },
+    {
+      "id": "paper-smoothquant",
+      "title": "SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models",
+      "authors": [
+        "Guangxuan Xiao",
+        "Ji Lin",
+        "Mickael Seznec",
+        "Hao Wu",
+        "Julien Demouth",
+        "Song Han"
+      ],
+      "year": 2022,
+      "url": "https://arxiv.org/abs/2211.10438v7",
+      "version": "v7",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "verified",
+        "id": "CC-BY-4.0",
+        "source_url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "topics": [
+        "quantization",
+        "INT8",
+        "W8A8",
+        "activation outliers",
+        "inference efficiency"
+      ],
+      "curator_note": "Studies post-training compression of both weights and activations, moving scaling difficulty away from activation outliers. The quoted maximum speedup and memory result apply to the paper's experiments, not every model or CPU. First submitted in 2022; this indexed revision is from 2024."
+    },
+    {
+      "id": "paper-gptq",
+      "title": "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers",
+      "authors": [
+        "Elias Frantar",
+        "Saleh Ashkboos",
+        "Torsten Hoefler",
+        "Dan Alistarh"
+      ],
+      "year": 2022,
+      "url": "https://arxiv.org/abs/2210.17323v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "verified",
+        "id": "CC-BY-4.0",
+        "source_url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "topics": [
+        "quantization",
+        "post training",
+        "weight compression",
+        "3 bit",
+        "4 bit"
+      ],
+      "curator_note": "Studies one-shot weight compression using approximate curvature information. The excerpt refers to the evaluated GPT-model setting; it is not a universal guarantee of lossless compression. First submitted in 2022; indexed revision from 2023."
+    },
+    {
+      "id": "paper-alce",
+      "title": "Enabling Large Language Models to Generate Text with Citations",
+      "authors": [
+        "Tianyu Gao",
+        "Howard Yen",
+        "Jiatong Yu",
+        "Danqi Chen"
+      ],
+      "year": 2023,
+      "url": "https://arxiv.org/abs/2305.14627v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "unknown",
+        "id": null,
+        "source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+        "observed_label": "arXiv non-exclusive distribution; third-party reuse permission not established"
+      },
+      "topics": [
+        "citations",
+        "citation support",
+        "ALCE",
+        "evidence",
+        "evaluation"
+      ],
+      "curator_note": "Introduces a cited-answer benchmark separating fluency, correctness and citation quality. Its ELI5 finding is specific to the evaluated systems and benchmark; a citation's existence alone does not establish that it justifies an answer."
+    },
+    {
+      "id": "paper-rag",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "authors": [
+        "Patrick Lewis",
+        "Ethan Perez",
+        "Aleksandra Piktus",
+        "Fabio Petroni",
+        "Vladimir Karpukhin",
+        "Naman Goyal",
+        "Heinrich Küttler",
+        "Mike Lewis",
+        "Wen-tau Yih",
+        "Tim Rocktäschel",
+        "Sebastian Riedel",
+        "Douwe Kiela"
+      ],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/2005.11401v4",
+      "version": "v4",
+      "accessed_at": "2026-10-16",
+      "source_kind": "arxiv_abstract",
+      "license": {
+        "status": "unknown",
+        "id": null,
+        "source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+        "observed_label": "arXiv non-exclusive distribution; third-party reuse permission not established"
+      },
+      "topics": [
+        "retrieval augmented generation",
+        "RAG",
+        "knowledge",
+        "provenance"
+      ],
+      "curator_note": "Combines a text generator with retrieved external memory and evaluates knowledge-focused tasks. This seed excerpt identifies the provenance motivation; Aurora does not reproduce the paper's trained architecture or benchmark results."
+    }
+  ],
+  "passages": [
+    {
+      "id": "passage-lora-1",
+      "paper_id": "paper-lora",
+      "text": "LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture",
+      "section": "Abstract; method sentence fragment",
+      "source_url": "https://arxiv.org/abs/2106.09685v2",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: a fragment describing which parameters remain fixed and which are added. It is not a complete recipe or performance comparison.",
+      "text_sha256": "257a8a2621376a8001d91f6ff16c4e81fae1779b4d8a7a4bfe2ab626553f9418"
+    },
+    {
+      "id": "passage-qlora-1",
+      "paper_id": "paper-qlora",
+      "text": "QLoRA backpropagates gradients through a frozen, 4-bit quantized pretrained language model into Low Rank Adapters~(LoRA).",
+      "section": "Abstract; method sentence",
+      "source_url": "https://arxiv.org/abs/2305.14314v1",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: a method statement about adaptation, not a universal inference-accuracy claim. The visible abstract's TeX notation is unchanged.",
+      "text_sha256": "af18435f568ffd198c72ccaff7ef33bfa35ce2e3902043d2cfe131f17eab0e32"
+    },
+    {
+      "id": "passage-lost-middle-1",
+      "paper_id": "paper-lost-middle",
+      "text": "We find that performance can degrade significantly when changing the position of relevant information",
+      "section": "Abstract; finding sentence fragment",
+      "source_url": "https://arxiv.org/abs/2307.03172v3",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: results from multi-document answering and key-value retrieval; the tested models can be sensitive to placement inside long inputs.",
+      "text_sha256": "fb052c274932f958ebbde7a77c55f90f988ad812a2c0b6c076465c224223e359"
+    },
+    {
+      "id": "passage-flashattention-1",
+      "paper_id": "paper-flashattention",
+      "text": "We propose FlashAttention, an IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes",
+      "section": "Abstract; method sentence fragment",
+      "source_url": "https://arxiv.org/abs/2205.14135v2",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: the following source text specifies GPU HBM and SRAM. The method optimizes data movement rather than claiming attention is sparse.",
+      "text_sha256": "dc372c78631ebc491dab28686560b9ece5c0b24b957701cb59c62d751f1d6d8f"
+    },
+    {
+      "id": "passage-smoothquant-1",
+      "paper_id": "paper-smoothquant",
+      "text": "We demonstrate up to 1.56x speedup and 2x memory reduction for LLMs with negligible loss in accuracy.",
+      "section": "Abstract; reported experimental finding",
+      "source_url": "https://arxiv.org/abs/2211.10438v7",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: the method is W8A8 post-training quantization. These are maximum reported results, with model, hardware and workload qualifications; Aurora has not reproduced them.",
+      "text_sha256": "d4298074586a69083a5ac5be727f5b523f9d35a494b09ae30a99025327935c03"
+    },
+    {
+      "id": "passage-gptq-1",
+      "paper_id": "paper-gptq",
+      "text": "reducing the bitwidth down to 3 or 4 bits per weight, with negligible accuracy degradation relative to the uncompressed baseline.",
+      "section": "Abstract; reported experimental finding fragment",
+      "source_url": "https://arxiv.org/abs/2210.17323v2",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: the source sentence discusses GPT models up to 175 billion parameters under the paper's compression experiments. It does not cover every task or quantization strategy.",
+      "text_sha256": "41d5945ffcf81c6e065769496e950f4856a37a176c0a659a7996f08158b1d2ad"
+    },
+    {
+      "id": "passage-alce-1",
+      "paper_id": "paper-alce",
+      "text": "For example, on the ELI5 dataset, even the best models lack complete citation support 50% of the time.",
+      "section": "Abstract; benchmark-specific finding",
+      "source_url": "https://arxiv.org/abs/2305.14627v2",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: a reported limitation of the evaluated cited-answer systems. This number is a source finding, never Aurora's evaluation result.",
+      "text_sha256": "b40a7289bb50d76a87b3a9dc4161b6d2481a3457c09b724dc53c4800462aa640"
+    },
+    {
+      "id": "passage-rag-1",
+      "paper_id": "paper-rag",
+      "text": "Additionally, providing provenance for their decisions and updating their world knowledge remain open research problems.",
+      "section": "Abstract; motivation sentence",
+      "source_url": "https://arxiv.org/abs/2005.11401v4",
+      "text_kind": "verbatim_excerpt",
+      "curator_note": "Original context: motivates retrieval with external knowledge. This sentence is not evidence that retrieval solves provenance or guarantees grounded generation.",
+      "text_sha256": "d4cfce0d66f64457d73da809a6c361dc61f9d6e7afd91d9b98ca5d3c3dddf522"
+    }
+  ],
+  "challenges": [
+    {
+      "id": "challenge-long-context",
+      "question": "Does a longer context guarantee effective use of relevant information?",
+      "claim": "Accepting a longer context guarantees effective use of relevant information regardless of its position.",
+      "description": "Agent-curated development illustration, source-checked but awaiting independent human adjudication. Remove the context-position study to inspect an evidence gap.",
+      "development_only": true,
+      "review": {
+        "reviewer": "AI source-curation agent",
+        "independent_human_review": false,
+        "date": "2026-10-16"
+      },
+      "relations": [
+        {
+          "passage_id": "passage-lost-middle-1",
+          "relation": "challenges",
+          "rationale": "The stated position-dependent degradation supplies a counterexample in the paper's evaluated settings to a guarantee independent of position; it says nothing universal about future models."
+        }
+      ]
+    },
+    {
+      "id": "challenge-quantization",
+      "question": "Can quantization preserve accuracy in reported experiments?",
+      "claim": "Quantization necessarily causes large accuracy losses in every setting.",
+      "description": "Agent-curated development illustration, not held-out gold. Compare two distinct compression methods and inspect their experimental qualifications.",
+      "development_only": true,
+      "review": {
+        "reviewer": "AI source-curation agent",
+        "independent_human_review": false,
+        "date": "2026-10-16"
+      },
+      "relations": [
+        {
+          "passage_id": "passage-smoothquant-1",
+          "relation": "challenges",
+          "rationale": "The authors report a small accuracy cost in their tested W8A8 setting; that bounded example challenges an every-setting large-loss claim, without making compression universally safe."
+        },
+        {
+          "passage_id": "passage-gptq-1",
+          "relation": "challenges",
+          "rationale": "The reported low-bit weight experiment has a small degradation relative to its baseline. Its scope differs from SmoothQuant and must be preserved."
+        }
+      ]
+    },
+    {
+      "id": "challenge-citations",
+      "question": "Do citations guarantee complete support for generated answers?",
+      "claim": "Adding citations guarantees complete evidence support for generated answers.",
+      "description": "Agent-curated development illustration, not a general automatic support classifier. Inspect the cited-answer benchmark's reported limitation.",
+      "development_only": true,
+      "review": {
+        "reviewer": "AI source-curation agent",
+        "independent_human_review": false,
+        "date": "2026-10-16"
+      },
+      "relations": [
+        {
+          "passage_id": "passage-alce-1",
+          "relation": "challenges",
+          "rationale": "Incomplete support in the evaluated citation-producing systems is a bounded counterexample to the guarantee. It does not imply that all cited answers are unsupported."
+        }
+      ]
+    }
+  ]
+}

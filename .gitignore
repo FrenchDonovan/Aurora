@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.aurora/
+work/
+data/private/
+artifacts/private/
+legacy/coding-agent/.aurora/
+.openai/*.local.*

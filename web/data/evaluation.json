@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "not_run",
+  "title": "Research evaluation",
+  "note": "No held-out study has been completed. Source-paper findings are not Aurora performance. Development challenges and software tests cannot establish model quality.",
+  "metrics": [],
+  "runs": [],
+  "engineering_checks": []
+}

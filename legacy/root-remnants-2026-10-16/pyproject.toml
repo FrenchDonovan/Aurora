@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aurora-coding-agent"
+version = "0.1.0"
+description = "An evaluation-driven coding agent with CPU-first failure intelligence"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "Aurora contributors"}]
+dependencies = []
+
+[project.scripts]
+aurora = "aurora.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aurora*"]

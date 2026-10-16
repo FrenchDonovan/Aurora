@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.aurora/
+runs/
+data/private/
+models/
+dist/
+build/

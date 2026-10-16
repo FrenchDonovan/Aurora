@@ -1,0 +1,12 @@
+{
+  "id": "aurora-nested-config-demo",
+  "repository": "repo",
+  "base_commit": "HEAD",
+  "issue": "coerce_values handles nested dictionaries, but strings inside lists remain unconverted. Make conversion recursive for mixed list/dictionary trees without mutating the input. Preserve values that do not need conversion.",
+  "editable_paths": ["config_parser.py"],
+  "test_command": ["python", "-m", "unittest", "discover", "-s", "tests", "-v"],
+  "evaluator_dir": "evaluator",
+  "evaluation_command": ["python", "-m", "unittest", "discover", "-s", ".aurora_eval", "-v"],
+  "split": "development",
+  "expected_failure": "AssertionError"
+}

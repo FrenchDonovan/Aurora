@@ -1,0 +1,8 @@
+[
+  {"tool": "list_files", "arguments": {}},
+  {"tool": "read_file", "arguments": {"path": "config_parser.py"}},
+  {"tool": "run_tests", "arguments": {}},
+  {"tool": "replace_text", "arguments": {"path": "config_parser.py", "old": "return value  # BUG: list contents are not visited", "new": "return [coerce_values(item) for item in value]"}},
+  {"tool": "run_tests", "arguments": {}},
+  {"finish": "Recursively coerce list elements, producing new lists and preserving the input. Public tests pass; independent grading remains authoritative."}
+]

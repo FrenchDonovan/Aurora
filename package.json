@@ -1,0 +1,14 @@
+{
+  "name": "aurora-evidence-stress-lab",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "An inspectable evidence lab for research questions and source-removal experiments",
+  "engines": {"node": ">=20"},
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/test.mjs",
+    "start": "node scripts/serve.mjs",
+    "validate": "node scripts/validate-corpus.mjs"
+  }
+}

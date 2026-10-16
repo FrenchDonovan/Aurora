@@ -1,0 +1,492 @@
+{
+  "synthetic": true,
+  "notice": "Synthetic unit/parity fixture only, not scientific evidence or a deployable model.",
+  "generated_by": "python -m research.generate_test_parity",
+  "corpus_sha256": "41d190277b3c8060ba58e517a82b9f3eb4aa4e28c96f28dafd4687ac9c8228de",
+  "model": {
+    "schema_version": 1,
+    "algorithm": "linear_logistic_v1",
+    "feature_version": "aurora-lexical-v1",
+    "feature_names": [
+      "log1p_bm25",
+      "passage_coverage",
+      "title_coverage",
+      "bigram_coverage",
+      "token_jaccard",
+      "length_saturation",
+      "numeric_coverage",
+      "tag_coverage"
+    ],
+    "weights": [
+      1.2133094672225408,
+      0.712642450557494,
+      0.2309387530068063,
+      0.47057037386721595,
+      0.39528628841191205,
+      -0.14771792170267234,
+      0.36379386521741625,
+      0.21049479691383002
+    ],
+    "bias": -0.8990501395356636,
+    "transforms": {
+      "kind": "identity",
+      "feature_version": "aurora-lexical-v1"
+    },
+    "training_provenance": {
+      "dataset_sha256": "56974c55585b79d3086800d1269cb0a46e2fb60fdc7952e2e640a788413cda00",
+      "corpus_sha256": "41d190277b3c8060ba58e517a82b9f3eb4aa4e28c96f28dafd4687ac9c8228de",
+      "corpus_version": "synthetic-unit-fixture-v1",
+      "train_rows": 8,
+      "validation_rows": 4,
+      "reviewed_train_rows": 0,
+      "annotators": [
+        "synthetic-test-generator"
+      ],
+      "label_provenance": [
+        "synthetic unit fixture"
+      ],
+      "leakage_checked": true,
+      "split_protocol": "question_family_disjoint_fixed_corpus",
+      "train_question_families": [
+        "synthetic-attention",
+        "synthetic-quantization"
+      ],
+      "validation_question_families": [
+        "synthetic-unicode"
+      ],
+      "target": "relevance>0; probability-like score is not truth confidence"
+    },
+    "seed": 17,
+    "pilot": true,
+    "synthetic": true,
+    "optimizer": {
+      "epochs": 100,
+      "learning_rate": 0.1,
+      "l2": 0.01,
+      "initialization": "zeros",
+      "update": "full-batch-gradient-descent"
+    },
+    "training_diagnostics": [
+      {
+        "epoch": 1,
+        "training_log_loss": 0.6703127568794959
+      },
+      {
+        "epoch": 100,
+        "training_log_loss": 0.2506056392176468
+      }
+    ],
+    "model_id": "synthetic-test-5e0a58f3eb8c6c82"
+  },
+  "queries": [
+    {
+      "question": "4 bit weights accuracy degradation",
+      "bm25_order": [
+        "synthetic-p-a",
+        "synthetic-p-c",
+        "synthetic-p-d"
+      ],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 3.304355938071022,
+          "features": [
+            1.459627518806023,
+            1.0,
+            0.2,
+            0.75,
+            0.625,
+            0.16666666666666666,
+            1.0,
+            0.4
+          ],
+          "learned_score": 0.9342640894767331
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 3.304355938071022,
+          "features": [
+            1.459627518806023,
+            1.0,
+            0.2,
+            0.75,
+            0.625,
+            0.16666666666666666,
+            1.0,
+            0.4
+          ],
+          "learned_score": 0.9342640894767331
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 1.0816276006539995,
+          "features": [
+            0.7331500880338948,
+            0.4,
+            0.2,
+            0.25,
+            0.16666666666666666,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.617304860733635
+        }
+      ]
+    },
+    {
+      "question": "Exact attention memory reads tiling",
+      "bm25_order": [
+        "synthetic-p-b"
+      ],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 7.14194606685046,
+          "features": [
+            2.097029225992336,
+            1.0,
+            0.4,
+            0.5,
+            0.5555555555555556,
+            0.1836734693877551,
+            0.0,
+            0.4
+          ],
+          "learned_score": 0.950840114124358
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        }
+      ]
+    },
+    {
+      "question": "École ８ bit precision café",
+      "bm25_order": [
+        "synthetic-p-d",
+        "synthetic-p-a",
+        "synthetic-p-c"
+      ],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 0.4615783112664786,
+          "features": [
+            0.379516886936584,
+            0.2,
+            0.0,
+            0.0,
+            0.08333333333333333,
+            0.16666666666666666,
+            0.0,
+            0.2
+          ],
+          "learned_score": 0.43889930019105833
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 0.4615783112664786,
+          "features": [
+            0.379516886936584,
+            0.2,
+            0.0,
+            0.0,
+            0.08333333333333333,
+            0.16666666666666666,
+            0.0,
+            0.2
+          ],
+          "learned_score": 0.43889930019105833
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 6.787868251101835,
+          "features": [
+            2.0525671704564648,
+            1.0,
+            0.8,
+            0.25,
+            0.5555555555555556,
+            0.1836734693877551,
+            1.0,
+            0.2
+          ],
+          "learned_score": 0.9610126201833312
+        }
+      ]
+    },
+    {
+      "question": "quantization experiments",
+      "bm25_order": [
+        "synthetic-p-a",
+        "synthetic-p-c"
+      ],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 0.597076388343696,
+          "features": [
+            0.46817470048950366,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.5
+          ],
+          "learned_score": 0.4951394417986683
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 0.597076388343696,
+          "features": [
+            0.46817470048950366,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.5
+          ],
+          "learned_score": 0.4951394417986683
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        }
+      ]
+    },
+    {
+      "question": "volcano geology",
+      "bm25_order": [],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        }
+      ]
+    },
+    {
+      "question": "the and is",
+      "bm25_order": [],
+      "rows": [
+        {
+          "passage_id": "synthetic-p-a",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-b",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        },
+        {
+          "passage_id": "synthetic-p-c",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.16666666666666666,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.28421073911261174
+        },
+        {
+          "passage_id": "synthetic-p-d",
+          "bm25": 0.0,
+          "features": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1836734693877551,
+            0.0,
+            0.0
+          ],
+          "learned_score": 0.2836999449492584
+        }
+      ]
+    }
+  ]
+}

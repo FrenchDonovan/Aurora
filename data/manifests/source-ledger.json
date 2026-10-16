@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "corpus_version": "seed-2026-10-16",
+  "checked_at": "2026-10-16",
+  "verification_method": "AI implementation agent inspected primary arXiv metadata/abstract and followed the source-page license link. Current-page displayed version matched the pinned URL. Not independent human adjudication or remote automated verification.",
+  "quote_count_method": "Whitespace-delimited excerpt words, aggregated per canonical source across versions; metadata and original curator notes are not counted as quotations.",
+  "metadata_access": "Public primary-source landing pages; no metadata license inferred to authorize full-paper reuse.",
+  "full_text_stored": false,
+  "sources": [
+    {
+      "paper_id": "paper-lora",
+      "primary_url": "https://arxiv.org/abs/2106.09685v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "unknown",
+      "license_id": null,
+      "license_source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "reuse_scope": "Third-party reuse permission not established by arXiv distribution grant. Short attributed excerpt only under implementation quotation policy; expanded redistribution requires separate review.",
+      "quoted_words": 20,
+      "passage_ids": [
+        "passage-lora-1"
+      ],
+      "excerpt_sha256": [
+        "257a8a2621376a8001d91f6ff16c4e81fae1779b4d8a7a4bfe2ab626553f9418"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-qlora",
+      "primary_url": "https://arxiv.org/abs/2305.14314v1",
+      "version": "v1",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "verified",
+      "license_id": "CC-BY-4.0",
+      "license_source_url": "https://creativecommons.org/licenses/by/4.0/",
+      "reuse_scope": "Attribution and license link retained; short exact abstract excerpt only. No full-paper redistribution.",
+      "quoted_words": 15,
+      "passage_ids": [
+        "passage-qlora-1"
+      ],
+      "excerpt_sha256": [
+        "af18435f568ffd198c72ccaff7ef33bfa35ce2e3902043d2cfe131f17eab0e32"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-lost-middle",
+      "primary_url": "https://arxiv.org/abs/2307.03172v3",
+      "version": "v3",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "unknown",
+      "license_id": null,
+      "license_source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "reuse_scope": "Third-party reuse permission not established by arXiv distribution grant. Short attributed excerpt only under implementation quotation policy; expanded redistribution requires separate review.",
+      "quoted_words": 14,
+      "passage_ids": [
+        "passage-lost-middle-1"
+      ],
+      "excerpt_sha256": [
+        "fb052c274932f958ebbde7a77c55f90f988ad812a2c0b6c076465c224223e359"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-flashattention",
+      "primary_url": "https://arxiv.org/abs/2205.14135v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "unknown",
+      "license_id": null,
+      "license_source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "reuse_scope": "Third-party reuse permission not established by arXiv distribution grant. Short attributed excerpt only under implementation quotation policy; expanded redistribution requires separate review.",
+      "quoted_words": 18,
+      "passage_ids": [
+        "passage-flashattention-1"
+      ],
+      "excerpt_sha256": [
+        "dc372c78631ebc491dab28686560b9ece5c0b24b957701cb59c62d751f1d6d8f"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-smoothquant",
+      "primary_url": "https://arxiv.org/abs/2211.10438v7",
+      "version": "v7",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "verified",
+      "license_id": "CC-BY-4.0",
+      "license_source_url": "https://creativecommons.org/licenses/by/4.0/",
+      "reuse_scope": "Attribution and license link retained; short exact abstract excerpt only. No full-paper redistribution.",
+      "quoted_words": 17,
+      "passage_ids": [
+        "passage-smoothquant-1"
+      ],
+      "excerpt_sha256": [
+        "d4298074586a69083a5ac5be727f5b523f9d35a494b09ae30a99025327935c03"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-gptq",
+      "primary_url": "https://arxiv.org/abs/2210.17323v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "verified",
+      "license_id": "CC-BY-4.0",
+      "license_source_url": "https://creativecommons.org/licenses/by/4.0/",
+      "reuse_scope": "Attribution and license link retained; short exact abstract excerpt only. No full-paper redistribution.",
+      "quoted_words": 20,
+      "passage_ids": [
+        "passage-gptq-1"
+      ],
+      "excerpt_sha256": [
+        "41d5945ffcf81c6e065769496e950f4856a37a176c0a659a7996f08158b1d2ad"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-alce",
+      "primary_url": "https://arxiv.org/abs/2305.14627v2",
+      "version": "v2",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "unknown",
+      "license_id": null,
+      "license_source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "reuse_scope": "Third-party reuse permission not established by arXiv distribution grant. Short attributed excerpt only under implementation quotation policy; expanded redistribution requires separate review.",
+      "quoted_words": 18,
+      "passage_ids": [
+        "passage-alce-1"
+      ],
+      "excerpt_sha256": [
+        "b40a7289bb50d76a87b3a9dc4161b6d2481a3457c09b724dc53c4800462aa640"
+      ],
+      "independent_human_review": false
+    },
+    {
+      "paper_id": "paper-rag",
+      "primary_url": "https://arxiv.org/abs/2005.11401v4",
+      "version": "v4",
+      "accessed_at": "2026-10-16",
+      "checked_fields": [
+        "title",
+        "all authors",
+        "first-submission year",
+        "displayed version",
+        "exact abstract substring",
+        "source-page license destination"
+      ],
+      "license_status": "unknown",
+      "license_id": null,
+      "license_source_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "reuse_scope": "Third-party reuse permission not established by arXiv distribution grant. Short attributed excerpt only under implementation quotation policy; expanded redistribution requires separate review.",
+      "quoted_words": 15,
+      "passage_ids": [
+        "passage-rag-1"
+      ],
+      "excerpt_sha256": [
+        "d4cfce0d66f64457d73da809a6c361dc61f9d6e7afd91d9b98ca5d3c3dddf522"
+      ],
+      "independent_human_review": false
+    }
+  ]
+}

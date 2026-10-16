@@ -1,0 +1,20 @@
+{
+  "template_only": true,
+  "rubric_version": "pilot-relevance-v1",
+  "corpus_version": "seed-2026-10-16",
+  "query_id": null,
+  "question": null,
+  "question_family": null,
+  "source_family": null,
+  "passage_id": null,
+  "relevance": null,
+  "split": null,
+  "annotator": null,
+  "synthetic": false,
+  "reviewed": false,
+  "label_provenance": null,
+  "labeled_at": null,
+  "uncertain": null,
+  "adjudication": null,
+  "rationale": null
+}
