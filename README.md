@@ -12,6 +12,10 @@ Three implementation agents completed the first public-interface, retrieval/CPU 
 
 The dependable first mode is an **extractive evidence brief** running locally in the visitor's browser. It does not require a paid model API, installed model, account or GPU. It uses a curated excerpt collection rather than full-paper indexing or a complete literature search. A learned mode remains unavailable until a legitimate, compatible trained artifact exists. The engineering preview is publicly deployed at the demo link above. No held-out improvement is claimed.
 
+## Interactive reinforcement learning
+
+The **RL arena** trains a tabular Q-learning policy to choose excerpts and STOP under an evidence budget. Visitors can vary reading cost, source exclusions, seed and training duration; inspect live return curves and decision traces; compare against random, greedy and exact-optimal strategies; and export the Q-table and full experiment receipt. This optimizes an explicit lexical coverage reward for the current question. It does not establish scientific accuracy or generalization. See [the MDP, learning update, controls and limitations](docs/RL_ARENA.md).
+
 ## Local development
 
 Node.js 20+ is enough for the website. No npm dependencies are required.

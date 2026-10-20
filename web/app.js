@@ -1,9 +1,10 @@
 import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js';
 import { initializeEngine } from './ui/model-loader.js';
+import { initializeRLArena } from './ui/rl-arena.js';
 
 const $ = id => document.getElementById(id);
 const state = { corpus: null, engine: null, evaluation: null, original: null, current: null, exclusions: new Set(), challenge: null, runs: 0, hash: null, modelHash: null, modelNote: '', sourceFocus: null };
-const APP_VERSION = 'aurora-r0';
+const APP_VERSION = 'aurora-r0-rl1';
 const normalized = value => value.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase();
 const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
@@ -192,12 +193,13 @@ function renderLibrary() {
   if (!papers.length) $('source-library').append(element('p', 'no-matches', 'No matching papers in this collection.'));
 }
 function changeView(view) {
-  if (!['lab', 'corpus', 'methods'].includes(view)) return;
-  for (const name of ['lab', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
+  if (!['lab', 'rl', 'corpus', 'methods'].includes(view)) return;
+  if (window.location.hash !== `#${view}`) window.history.replaceState(null, '', `#${view}`);
+  for (const name of ['lab', 'rl', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
   document.querySelectorAll('.main-nav [data-view]').forEach(button => {
     if (button.dataset.view === view) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   });
-  const heading = view === 'lab' ? $('lab-title') : $(view === 'corpus' ? 'corpus-title' : 'methods-title');
+  const heading = $(({lab:'lab-title', rl:'rl-title', corpus:'corpus-title', methods:'methods-title'})[view]);
   heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
@@ -288,6 +290,8 @@ async function initialize() {
       button.append(element('span', '', String(index + 1).padStart(2, '0')), element('span', '', challenge.question), element('span', '', '↗')); return button;
     }));
     $('corpus-summary').textContent = `${state.corpus.papers.length} papers · ${state.corpus.passages.length} excerpts · ${state.corpus.domain}. Corpus ${state.corpus.corpus_version}. ${state.corpus.provenance_note ?? ''}`;
+    initializeRLArena(state.corpus, { getInvestigation: () => state.current, inspectSource: openSource });
+    if (window.location.hash) changeView(window.location.hash.slice(1));
     renderLibrary(); renderEvaluation(); $('ask-button').disabled = false; setStatus('Ready. Choose an example or investigate your own question.');
   } catch (error) { showError(error.message || 'The lab could not initialize. Please refresh the page.'); setStatus('The lab is unavailable. No result has been generated.'); $('evaluation-note').textContent = 'Application data could not be loaded. No research performance is claimed.'; }
 }
@@ -308,4 +312,5 @@ $('source-search').addEventListener('input', renderLibrary);
 $('export-json').addEventListener('click', () => download('json'));
 $('export-markdown').addEventListener('click', () => download('markdown'));
 document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => changeView(button.dataset.view)));
+window.addEventListener('hashchange', () => changeView(window.location.hash.slice(1) || 'lab'));
 initialize();

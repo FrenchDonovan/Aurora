@@ -577,3 +577,8 @@ These are provisional effort ranges, not a promised completion date. Hardware, t
 Default operational decisions: paid-service budget is zero; no generative provider enabled; no custom domain purchased; no end-user account collection; no document uploads; no analytics query logging; no GPU dependency. Decisions that may later improve scope are the exact domain subset, author time/RAM, availability of a second human annotator, and whether a small hosting/model budget is acceptable. They do not block the current no-key engineering implementation. Any paid or privacy-affecting change needs its concrete configuration reviewed against the user's instructions.
 
 The R0 exit review must include an honest decision: does a visitor learn something useful by inspecting/removing evidence, or does the product merely look polished? If the latter, improve the domain data and interaction before adding more infrastructure or calling it CV-ready.
+
+
+## 39. RL arena addition — 2026-10-20
+
+The user requested an RL component. Add a bounded, query-local evidence-selection MDP with tabular Q-learning, exposed reward design, source exclusions, seeded training, learning curves, policy traces, greedy/random controls and an exhaustive small-state oracle. Its scope and protocol are specified in docs/RL_ARENA.md. This educational sandbox is separate from the unmeasured assistant-quality evaluation and the supervised model gate. It does not satisfy R1/R4, establish semantic support, or claim held-out improvement.

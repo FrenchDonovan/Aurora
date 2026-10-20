@@ -145,3 +145,8 @@ No made-up metric values. Tests validate code behavior; they are not real model 
 Deployment integration correction: app also loads `data/runtime.json` (`schema_version:1`, `model:null` or `{url:'./data/model.json'}`). Build derives this declaration from the existence of an approved model artifact. A declared absence skips the request entirely, because some static hosts return index HTML with HTTP 200 for missing assets. Rejection messages stay understandable and do not expose raw parser details.
 
 Parent's `scripts/build.mjs` copies only `web/**` into `dist`, excludes test-only data, and rejects production files containing held-out labels or credentials. `scripts/serve.mjs` serves `dist` on loopback with path containment and correct MIME types. `package.json` sets `type: module`, commands `build`, `test`, `start`; Node built-ins suffice. Browser/ML versions and public-access status must be reported honestly.
+
+
+## RL arena extension — 2026-10-20
+
+The parent adds `web/lib/rl.js`, exporting `createEvidenceEnvironment`, `createQLearner`, `seededRandom` and `RL_VERSION`; and `web/ui/rl-arena.js`, initialized after corpus loading. The environment snapshots validated corpus data, filters exclusions before constructing actions, bounds the action/state space, and exposes transition rewards and exact/greedy/random controls. Receipts use a separate RL schema and retain the complete proxy reward and same-environment limitation. No RL policy enters `createEngine` or the supervised model artifact path. The research evaluation artifact remains unchanged. See `docs/RL_ARENA.md` for the exact MDP, update and reproducibility contract.

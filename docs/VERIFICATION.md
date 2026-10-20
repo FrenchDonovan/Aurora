@@ -36,3 +36,17 @@ The independent reviewer wrote 17 findings. The plan was revised to v1.1, close 
 ## Not established
 
 No semantic verification, calibrated answerability, useful trained-model improvement, human-adjudicated benchmark, complete literature coverage, legal opinion on content reuse, guarantee of novelty, or completed public no-login CV release is claimed. Those require the later evidence and access gates. Deployment state is a separate observed native hosting result, not inferred from this local preview.
+
+
+## RL arena engineering checks — 2026-10-20
+
+- Corpus validation passed. All 39 JavaScript tests and all 15 Python tests passed. Eight new RL tests cover actual TD learning, a synthetic nonmyopic counterexample, reward accounting, exact planning, determinism, source exclusion, invalid settings and empty/irrelevant environments.
+- Browser training completed 3,000 seeded episodes from zero, producing an actual Q-table and trajectory. The downloaded JSON receipt was read and matched an independently executed command-line run as complete JSON data (7,536 TD updates, 37 Q-table rows for the default configuration).
+- Source removal invalidated the old policy/export before retraining. Removing SmoothQuant changed the active action space from eight to seven excerpts; the new trajectory selected other sources and carried a different environment hash. Selected-source inspection opened the original provenance modal.
+- The current main investigation and its exclusion set imported correctly into the arena. The original BM25 sample investigation remained operational. Cancelling an 8,000-episode run discarded the partial policy and restored controls; a fresh run starts from zero.
+- The 390×844 responsive layout stacked controls and results into one column without horizontal page overflow. The temporary viewport override was reset.
+- Build includes the RL engine and UI module as static assets. The optional supervised ranker remains unavailable and `evaluation.json` remains `not_run`.
+
+These are software checks on a query-local lexical-reward sandbox. They do not establish semantic evidence utility, scientific accuracy, held-out RL improvement or cross-question generalization.
+
+Public deployment verification: an unauthenticated HTTP client received the RL interface and the deployed stylesheet/JavaScript matched the checked build. Browser training on the public URL completed all 3,000 episodes, displayed comparisons, and enabled the receipt export. A returning tab retained the old stylesheet despite the new CSS being available at the origin. Entry-point asset URLs now carry the `aurora-r0-rl1` release key so that returning visitors receive the new layout. Bump this key with a subsequent frontend release; verify both fresh and returning-page behavior.
