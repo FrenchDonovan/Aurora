@@ -1,10 +1,10 @@
 import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js';
 import { initializeEngine } from './ui/model-loader.js';
-import { initializeRLArena } from './ui/rl-arena.js';
+import { initializeRLArena } from './ui/rl-arena.js?v=aurora-r0-studio1';
 
 const $ = id => document.getElementById(id);
 const state = { corpus: null, engine: null, evaluation: null, original: null, current: null, exclusions: new Set(), challenge: null, runs: 0, hash: null, modelHash: null, modelNote: '', sourceFocus: null };
-const APP_VERSION = 'aurora-r0-rl1';
+const APP_VERSION = 'aurora-r0-studio1';
 const normalized = value => value.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase();
 const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
@@ -177,6 +177,17 @@ function openSource(paperId, trigger) {
   $('source-dialog').showModal();
 }
 function closeSource() { $('source-dialog').close(); state.sourceFocus?.focus({ preventScroll: true }); }
+
+function renderSourceField() {
+  $('source-field').replaceChildren(...state.corpus.papers.map((paper, index) => {
+    const shortTitle = paper.title.split(':')[0];
+    const button = action('', 'source-ticket', () => openSource(paper.id, button));
+    button.append(element('span', 'source-ticket-number', String(index + 1).padStart(2, '0')), element('strong', '', shortTitle), element('span', 'source-ticket-year', paper.year), element('span', 'source-ticket-arrow', '↗'));
+    button.setAttribute('aria-label', `Inspect source ${index + 1}: ${paper.title}`);
+    return button;
+  }));
+}
+
 function renderLibrary() {
   if (!state.corpus) return;
   const query = $('source-search').value.trim().toLowerCase();
@@ -292,7 +303,7 @@ async function initialize() {
     $('corpus-summary').textContent = `${state.corpus.papers.length} papers · ${state.corpus.passages.length} excerpts · ${state.corpus.domain}. Corpus ${state.corpus.corpus_version}. ${state.corpus.provenance_note ?? ''}`;
     initializeRLArena(state.corpus, { getInvestigation: () => state.current, inspectSource: openSource });
     if (window.location.hash) changeView(window.location.hash.slice(1));
-    renderLibrary(); renderEvaluation(); $('ask-button').disabled = false; setStatus('Ready. Choose an example or investigate your own question.');
+    renderLibrary(); renderSourceField(); renderEvaluation(); $('ask-button').disabled = false; setStatus('Ready. Choose an example or investigate your own question.');
   } catch (error) { showError(error.message || 'The lab could not initialize. Please refresh the page.'); setStatus('The lab is unavailable. No result has been generated.'); $('evaluation-note').textContent = 'Application data could not be loaded. No research performance is claimed.'; }
 }
 

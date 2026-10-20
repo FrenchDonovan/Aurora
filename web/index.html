@@ -3,56 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f4ed">
+  <meta name="theme-color" content="#eae7df">
   <meta name="description" content="Aurora is an interactive evidence stress lab. Ask a research question, inspect exact source excerpts, and remove a paper to see how the evidence changes.">
   <title>Aurora — Evidence Lab · Engineering Preview</title>
-  <link rel="stylesheet" href="./styles.css?v=aurora-r0-rl1">
-  <script type="module" src="./app.js?v=aurora-r0-rl1"></script>
+  <link rel="stylesheet" href="./styles.css?v=aurora-r0-studio1">
+  <script type="module" src="./app.js?v=aurora-r0-studio1"></script>
 </head>
 <body>
+  <div class="edition-rail" aria-hidden="true"><span>AURORA / INDEPENDENT RESEARCH SOFTWARE</span><span>EST. 2026</span></div>
   <a class="skip-link" href="#main">Skip to research workspace</a>
   <header class="site-header">
-    <a href="./" class="brand" aria-label="Aurora home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>aurora<span class="brand-period">.</span></span></a>
-    <span class="header-label">AN EVIDENCE STRESS LAB</span>
+    <a href="#lab" class="brand" aria-label="Aurora home"><span class="brand-symbol" aria-hidden="true">a<span>↗</span></span><span class="brand-name">AURORA<span class="brand-caption">EVIDENCE STRESS LAB</span></span></a>
     <nav class="main-nav" aria-label="Main navigation">
-      <button type="button" data-view="lab" aria-current="page">The lab</button>
-      <button type="button" data-view="rl">RL arena</button>
-      <button type="button" data-view="corpus">Source library</button>
-      <button type="button" data-view="methods">Methods & results</button>
+      <button type="button" data-view="lab" aria-current="page"><span>01</span> Evidence lab</button>
+      <button type="button" data-view="rl"><span>02</span> RL arena</button>
+      <button type="button" data-view="corpus"><span>03</span> Sources</button>
+      <button type="button" data-view="methods"><span>04</span> Methods</button>
     </nav>
-    <span class="release-tag">R0 · engineering preview</span>
+    <span class="release-tag"><span class="status-dot"></span> ENGINEERING PREVIEW</span>
   </header>
 
   <main id="main" tabindex="-1">
     <section id="view-lab" class="view" aria-labelledby="lab-title">
       <div class="intro">
-        <div><p class="eyebrow"><span class="status-dot"></span> EFFICIENT & RELIABLE LANGUAGE MODELS</p>
-        <h1 id="lab-title">Good answers should<br>survive a closer look.</h1></div>
-        <p class="intro-note">Ask a question. Read the evidence.<br>Then remove a source and see what changes.<span>An engineering preview, not a validated research assistant.</span></p>
+        <div class="intro-heading"><p class="eyebrow">01 / THE EVIDENCE LAB</p><h1 id="lab-title">QUESTION<br> <span>THE EVIDENCE.</span></h1></div>
+        <div class="intro-side"><span class="hero-arrow" aria-hidden="true">↙</span><p>Pull a source.<br> See what holds.</p><span>Live retrieval. Inspectable excerpts.<br> One paper removed changes the experiment.</span></div>
+        <div class="intro-baseline"><span>EFFICIENT &amp; RELIABLE LANGUAGE MODELS</span><span>BM25 RETRIEVAL / SOURCE ABLATION / TABULAR RL</span></div>
       </div>
 
       <div class="workspace">
         <aside class="question-panel" aria-label="Research controls">
-          <p class="section-index">01 / INVESTIGATE</p>
+          <p class="section-index">INPUT / 01</p>
           <form id="question-form">
-            <label for="question">What would you like to investigate?</label>
+            <label for="question">Set your question.</label>
             <textarea id="question" name="question" rows="5" maxlength="600" placeholder="Does a longer context mean a model uses all the evidence?" aria-describedby="question-hint" required></textarea>
-            <p id="question-hint" class="field-hint">Use Enter to investigate; Shift + Enter for a new line. Up to 600 characters.</p>
-            <div class="method-line"><label for="method">Retrieval</label><select id="method" aria-describedby="method-note"><option value="bm25">BM25 baseline</option><option value="learned" disabled>Learned ranker · unavailable</option></select></div>
-            <p id="method-note" class="field-hint">Lexical retrieval, with cited excerpts. Learned ranking awaits reviewed training data.</p>
             <button id="ask-button" class="button button-primary" type="submit" disabled>Investigate <span aria-hidden="true">↗</span></button>
-            <button id="reset-investigation" class="text-button reset-investigation" type="button">Reset investigation ↶</button>
+            <div class="form-secondary"><details class="investigation-options"><summary>Retrieval &amp; keyboard controls</summary><div class="method-line"><label for="method">Retrieval</label><select id="method" aria-describedby="method-note"><option value="bm25">BM25 baseline</option><option value="learned" disabled>Learned ranker · unavailable</option></select></div><p id="method-note" class="field-hint">Lexical retrieval, with cited excerpts. Learned ranking awaits reviewed training data.</p><p id="question-hint" class="field-hint">Use Enter to investigate; Shift + Enter for a new line. Up to 600 characters.</p></details><button id="reset-investigation" class="text-button reset-investigation" type="button">Reset ↶</button></div>
           </form>
-          <div class="sample-section"><p class="small-label">START WITH A DEVELOPMENT EXAMPLE</p><div id="samples" class="samples"></div><p class="field-hint">Curated examples illustrate behavior. They are not held-out evaluation.</p></div>
+          <div class="sample-section"><p class="small-label">OR START HERE / DEVELOPMENT EXAMPLES</p><div id="samples" class="samples"></div><p class="field-hint">Curated examples illustrate behavior. They are not held-out evaluation.</p></div>
           <div id="exclusions" class="exclusions" hidden><div class="row-spread"><h2>Sources removed</h2><button id="reset-exclusions" class="text-button" type="button">Restore all</button></div><ul id="excluded-list"></ul><p class="field-hint">Exclusions are applied before retrieval. The same question is rerun.</p></div>
           <div class="privacy-note"><span aria-hidden="true">◉</span><p>Your question is processed in this browser. No model API, account, or query logging.</p></div>
         </aside>
 
         <div class="evidence-panel">
-          <div class="panel-heading"><p class="section-index">02 / INSPECT & STRESS-TEST</p><span id="corpus-badge" class="quiet-label">Loading source collection…</span></div>
+          <div class="panel-heading"><p class="section-index">OUTPUT / EVIDENCE TRACE</p><span id="corpus-badge" class="quiet-label">Loading source collection…</span></div>
           <div id="app-status" role="status" aria-live="polite" class="app-status">Preparing the lab…</div>
           <div id="app-error" class="error-message" role="alert" hidden></div>
-          <div id="empty-state" class="empty-state"><div class="evidence-illustration" aria-hidden="true"><span class="illustration-line line-one"></span><span class="illustration-line line-two"></span><span class="illustration-line line-three"></span><span class="illustration-citation">[1]</span></div><p class="eyebrow">THE EVIDENCE IS THE INTERFACE</p><h2>Start with a question.<br>Leave with a trace.</h2><p>Aurora retrieves exact, short excerpts from a bounded collection of papers. You can inspect every source, remove one, and rerun the investigation.</p><div class="empty-steps"><span><b>01</b> Ask</span><span aria-hidden="true">→</span><span><b>02</b> Inspect</span><span aria-hidden="true">→</span><span><b>03</b> Remove & rerun</span></div><p class="scope-note">This release explores evidence relevance. It does not establish scientific truth or generate a full literature review.</p></div>
+          <div id="empty-state" class="empty-state">
+            <div class="empty-heading"><span class="empty-cross" aria-hidden="true">✳</span><div><p class="eyebrow">NO BLACK BOX. OPEN THE SOURCE.</p><h2>Start from<br> the source.</h2></div></div>
+            <p class="empty-deck">The collection behind every investigation. Open a paper to inspect the exact excerpt.</p>
+            <div class="source-field-head"><span class="small-label">THE ACTIVE SOURCE SET</span><span class="quiet-label">Inspect a source ↗</span></div>
+            <div id="source-field" class="source-field" aria-label="Inspect the source collection"></div>
+            <div class="flow-strip" aria-label="Investigation workflow"><span><b>01</b> Ask</span><i aria-hidden="true">→</i><span><b>02</b> Inspect</span><i aria-hidden="true">→</i><span><b>03</b> Remove &amp; rerun</span></div>
+            <p class="scope-note">A bounded collection of short excerpts. Retrieval shows relevance—not truth or a complete literature review.</p>
+          </div>
           <section id="result" hidden aria-labelledby="result-title">
             <div class="result-topline"><span id="result-mode" class="mode-tag">EXTRACTIVE EVIDENCE BRIEF</span><span id="run-count" class="quiet-label"></span></div>
             <h2 id="result-title" tabindex="-1"></h2>
@@ -69,14 +73,24 @@
       </div>
     </section>
 
-    <section id="view-corpus" class="view secondary-view" hidden aria-labelledby="corpus-title"><p class="eyebrow">THE COLLECTION / VERSIONED & BOUNDED</p><h1 id="corpus-title" tabindex="-1">A library you can inspect.</h1><p class="page-deck">Short source excerpts, linked to their original papers. Curator notes provide context and are always identified separately.</p><div id="corpus-summary" class="surface-note"></div><label for="source-search" class="small-label">FILTER BY TITLE, AUTHOR OR TOPIC</label><input id="source-search" class="search-input" type="search" placeholder="Try quantization or long context…"><p id="source-count" class="field-hint" role="status"></p><div id="source-library" class="source-library"></div></section>
+    <section id="view-corpus" class="view secondary-view" hidden aria-labelledby="corpus-title">
+      <div class="page-masthead"><div><p class="eyebrow">03 / THE SOURCE INDEX</p><h1 id="corpus-title" tabindex="-1">NO MYSTERY<br> <span>MATERIAL.</span></h1></div><p class="page-deck">Every excerpt has an origin.<br> Inspect the paper, the exact wording, and the boundary between source text and curator context.</p></div>
+      <div class="library-toolbar"><div><label for="source-search" class="small-label">FIND A SOURCE</label><input id="source-search" class="search-input" type="search" placeholder="Title, author or topic…"><p id="source-count" class="field-hint" role="status"></p></div><div id="corpus-summary" class="surface-note"></div></div>
+      <div class="index-table-head" aria-hidden="true"><span>REF.</span><span>PAPER / CONTEXT / TOPICS</span><span>RECORD</span></div><div id="source-library" class="source-library"></div>
+    </section>
 
-    <section id="view-methods" class="view secondary-view" hidden aria-labelledby="methods-title"><p class="eyebrow">THE METHOD / NO HIDDEN INFERENCE</p><h1 id="methods-title" tabindex="-1">Make the work inspectable.</h1><p class="page-deck">The interface is an experiment in evidence sensitivity. What matters is whether the behavior, provenance, and eventual measurements can be checked.</p><div class="method-grid"><section><p class="section-index">01 / WHAT RUNS TODAY</p><h2>A live lexical baseline.</h2><p>A question is tokenized and ranked against a curated excerpt collection using BM25. Selected passages become a cited, extractive brief. Removing a paper filters it out before the complete pipeline runs again.</p><ol class="pipeline"><li><b>Question</b><span>New questions run locally.</span></li><li><b>Retrieve</b><span>Rank the available excerpts.</span></li><li><b>Inspect</b><span>Open exact source text and metadata.</span></li><li><b>Stress</b><span>Remove a paper; compare the rerun.</span></li></ol></section><section><p class="section-index">02 / WHAT A SCORE MEANS</p><h2>Relevance is a narrow signal.</h2><p>A retrieval score estimates lexical relevance to your question. It is not a probability, truth confidence, citation verification, or a scientific verdict.</p><p>Only unchanged, curated development examples can display sample claim relations. Current examples were AI-curated and await independent human adjudication. An edited or new question receives no automatic support or contradiction label.</p><p>The collection uses short excerpts, often from abstracts. Full-paper qualifications may be absent. Inspect the original paper before relying on a finding.</p></section></div><section class="results-surface" aria-labelledby="evaluation-title"><div><p class="section-index">03 / RESEARCH EVALUATION</p><h2 id="evaluation-title">Not measured yet.</h2><p id="evaluation-note">No held-out study has been completed.</p></div><div id="evaluation-details"></div></section><div class="method-grid"><section><p class="section-index">04 / THE NEXT RESEARCH GATE</p><h2>Earn the learned component.</h2><p>A CPU-trained relevance ranker is planned. It requires reviewed question–passage judgments, question-family-disjoint splits, frozen features, Python/browser parity, and comparison with the same BM25 candidate pool.</p><p>The site checks for an optional model artifact. A missing, synthetic, invalid, or incompatible artifact leaves learned ranking visibly unavailable while the baseline remains usable. A valid reviewed-data pilot must be selected explicitly. Software checks do not establish model quality.</p></section><section><p class="section-index">05 / REPRODUCE A RUN</p><h2>Take the receipt.</h2><p>Every investigation can be exported as JSON or readable Markdown. The receipt records the question, corpus fingerprint, retrieval method, active excerpts, source exclusions, and limitations.</p><p>Exports contain the active result. An excluded paper cannot remain in its evidence brief. Questions stay in memory until you explicitly download them.</p></section></div></section>
+    <section id="view-methods" class="view secondary-view" hidden aria-labelledby="methods-title">
+      <div class="page-masthead"><div><p class="eyebrow">04 / UNDER THE SURFACE</p><h1 id="methods-title" tabindex="-1">SHOW<br> <span>YOUR WORK.</span></h1></div><p class="page-deck">An experiment is only interesting if you can take it apart. Here is what runs, what is learned, and what has yet to be measured.</p></div>
+      <div class="method-status"><span class="status-dot"></span><strong>RUNNING IN YOUR BROWSER</strong><span>BM25 retrieval + tabular Q-learning</span><span>No API key. No hidden model call.</span></div>
+      <section class="method-chapter"><span class="chapter-number" aria-hidden="true">01</span><div class="chapter-content"><p class="section-index">THE RETRIEVAL PIPELINE</p><h2>From question to a trace.</h2><p>A question is tokenized and ranked against a curated excerpt collection using BM25. Selected passages form a cited, extractive brief. Excluding a paper removes it before retrieval and synthesis run again.</p><ol class="pipeline"><li><b>Question</b><span>Tokenize the terms.</span></li><li><b>Retrieve</b><span>Rank available excerpts.</span></li><li><b>Extract</b><span>Preserve source wording.</span></li><li><b>Intervene</b><span>Remove a paper. Rerun.</span></li></ol></div><aside class="chapter-aside"><span class="small-label">THE CRITICAL DISTINCTION</span><p class="pull-quote">Relevance<br> ≠ truth.</p><p>A lexical score is not truth confidence, entailment, citation verification, or a scientific verdict. The collection uses short excerpts; full-paper qualifications may be absent.</p></aside></section>
+      <section class="method-chapter"><span class="chapter-number" aria-hidden="true">02</span><div class="chapter-content"><p class="section-index">THE LEARNED POLICY</p><h2>A small world.<br> Real reinforcement learning.</h2><p>The RL arena learns which excerpt to select next—or when to stop—under a reading budget. A tabular Q-learning agent explores the environment and updates state–action values from transition rewards.</p><div class="equation-block"><span>TEMPORAL-DIFFERENCE UPDATE</span><code>Q(s,a) ← Q(s,a) + α [r + γ max Q(s′,a′) − Q(s,a)]</code></div><p>The state is the selected-excerpt bitmask. Actions select an unread excerpt or STOP. Every run starts from zero Q-values. Seeded training, decision traces, baseline comparisons and Q-tables are exportable.</p><button type="button" data-view="rl" class="button button-small">Enter the RL arena <span aria-hidden="true">↗</span></button></div><aside class="chapter-aside"><span class="small-label">WHAT THE REWARD MEASURES</span><p class="pull-quote">Coverage.<br> Cost.<br> Overlap.</p><p>The explicit lexical reward is a proxy. Training and evaluation share one question and environment. This is tabular RL, not deep RL, RLHF, or evidence of generalization.</p></aside></section>
+      <section class="results-surface" aria-labelledby="evaluation-title"><div><p class="section-index">03 / THE RESEARCH RECORD</p><h2 id="evaluation-title">Not measured yet.</h2><p id="evaluation-note">No held-out study has been completed.</p></div><div id="evaluation-details"></div></section>
+      <section class="method-chapter"><span class="chapter-number" aria-hidden="true">04</span><div class="chapter-content"><p class="section-index">THE NEXT RESEARCH GATE</p><h2>Earn the learned ranker.</h2><p>A CPU-trained relevance pipeline is implemented, but a production model requires reviewed question–passage judgments, question-family-disjoint splits, frozen features, Python/browser parity, and comparison with the same BM25 candidate pool.</p><p>A missing, synthetic, invalid or incompatible artifact leaves learned ranking unavailable. A valid reviewed-data pilot must be selected explicitly. Software checks do not establish model quality.</p></div><aside class="chapter-aside"><span class="small-label">CURATION ≠ ADJUDICATION</span><p>Only unchanged development examples can display curated sample claim relations. Current examples were AI-curated and await independent human adjudication. Edited and new questions receive no automatic support or contradiction label.</p></aside></section>
+      <section class="method-chapter receipt-chapter"><span class="chapter-number" aria-hidden="true">05</span><div class="chapter-content"><p class="section-index">REPRODUCIBILITY</p><h2>Leave with the receipt.</h2><p>Export the active investigation as JSON or Markdown: the question, corpus fingerprint, method, selected excerpts, exclusions and limitations. RL receipts additionally include reward settings, learning curves, state–action values and baselines.</p><p>Questions stay in memory until you download them. Excluded papers do not remain in the active evidence brief.</p></div><aside class="chapter-aside"><span class="receipt-symbol" aria-hidden="true">[↗]</span><button type="button" data-view="lab" class="text-button">Run your own investigation ↗</button></aside></section>
+    </section>
     <section id="view-rl" class="view secondary-view" hidden aria-labelledby="rl-title">
-      <p class="eyebrow">REINFORCEMENT LEARNING / EVIDENCE UNDER A BUDGET</p>
-      <h1 id="rl-title" tabindex="-1">Teach an agent when to stop.</h1>
-      <p class="page-deck">Which excerpt should an agent read next? Train a Q-learning policy, change the reading cost, and inspect the decisions it learns. Every episode runs here in your browser.</p>
-      <div class="rl-scope surface-note"><strong>A transparent RL sandbox.</strong> This agent optimizes a declared lexical reward for one question. It does not learn scientific truth, verify citations, or replace the retrieval baseline. Training and evaluation use the same environment.</div>
+      <div class="page-masthead"><div><p class="eyebrow">02 / THE RL ARENA</p><h1 id="rl-title" tabindex="-1">LEARN.<br> <span>SELECT. STOP.</span></h1></div><p class="page-deck">Give the agent a question.<br> Make every excerpt cost something.<br> Watch a policy emerge from experience.</p></div>
+      <div class="rl-scope surface-note"><strong>THE EXPERIMENT</strong><span>Tabular Q-learning selects evidence under a budget. The declared reward measures lexical coverage, reading cost and overlap. Training and evaluation use the same environment; research quality and generalization are not measured.</span></div>
       <div class="rl-workspace">
         <aside class="rl-controls">
           <form id="rl-form">
@@ -104,10 +118,11 @@
           <p id="rl-status" class="app-status" role="status" aria-live="polite">Ready. Train a fresh policy, then change the cost or remove a source and compare.</p>
           <progress id="rl-progress" max="3000" value="0" aria-label="Completed training episodes"></progress>
           <p id="rl-error" class="error-message" role="alert" hidden></p>
+          <div id="rl-idle" class="rl-idle"><p class="eyebrow">POLICY / UNTRAINED</p><div class="policy-diagram" aria-hidden="true"><span class="policy-state">s<sub>0</sub><small>NO EXCERPTS</small></span><span class="policy-path">→<span>EXPLORE / REWARD / UPDATE</span>→</span><span class="policy-state policy-terminal">π<small>SELECT OR STOP</small></span></div><h2>A blank Q-table.<br> A policy you can inspect.</h2><p>Set the budget and reading cost, then train. Compare the learned policy with greedy selection, random rollouts and the exact proxy optimum.</p><div class="idle-parameters"><span>α <b>0.2</b></span><span>γ <b>1.0</b></span><span>ε <b>1 → 0.05</b></span><span>INITIAL Q <b>0</b></span></div></div>
           <div id="rl-results" hidden>
             <p id="rl-environment" class="field-hint"></p>
             <div class="rl-chart-heading"><h2>A policy trained from experience.</h2><span class="mini-tag">LIVE TD UPDATES</span></div>
-            <p class="field-hint">Green: reward from the current greedy Q-policy, with exploration off. Ochre: mean exploratory training return in each 100-episode window. Neither line is held-out accuracy.</p>
+            <p class="field-hint">Solid orange: greedy Q-policy return, with exploration off. Dashed gray: mean exploratory training return in each 100-episode window. Neither line is held-out accuracy.</p>
             <svg id="rl-chart" viewBox="0 0 700 225" role="img" aria-label="Live training return curves"></svg>
             <div id="rl-comparisons" class="rl-comparisons" aria-label="Strategies compared on the same proxy reward"></div>
             <p id="rl-gap" class="scope-note"></p>
@@ -123,7 +138,7 @@
     </section>
 
   </main>
-  <footer class="site-footer"><span class="footer-brand">aurora.</span><p>Built for questions worth checking.</p><span>R0 engineering preview · curated excerpts · extractive baseline</span><button type="button" data-view="methods" class="text-button">Read the methodology ↗</button></footer>
+  <footer class="site-footer"><span class="footer-brand">AURORA<span>↗</span></span><p>Questions worth checking.<br> Software you can inspect.</p><span>INDEPENDENT RESEARCH SOFTWARE<br> ENGINEERING PREVIEW / 2026</span><a href="https://github.com/FrenchDonovan/Aurora" target="_blank" rel="noopener noreferrer">Explore the source ↗</a></footer>
   <dialog id="source-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><span class="section-index">SOURCE RECORD</span><button id="close-dialog" type="button" class="close-button" aria-label="Close source details">×</button></div><div id="source-dialog-content"><h2 id="dialog-title" class="dialog-title">Source details</h2></div></dialog>
   <noscript><p class="noscript">Aurora runs its retrieval engine in your browser. Enable JavaScript to use the lab.</p></noscript>
 </body>

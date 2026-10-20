@@ -9,7 +9,7 @@ export function initializeRLArena(corpus, { getInvestigation, inspectSource }) {
   const controls = $('rl-settings');
   function invalidate() {
     generation++; learner = null; activeReceipt = null;
-    $('rl-results').hidden = true; $('rl-export').disabled = true;
+    $('rl-results').hidden = true; $('rl-idle').hidden = false; $('rl-export').disabled = true;
     $('rl-status').textContent = 'Settings changed. Train a fresh policy for this environment.';
     $('rl-error').hidden = true; $('rl-progress').value = 0;
   }
@@ -35,18 +35,18 @@ export function initializeRLArena(corpus, { getInvestigation, inspectSource }) {
   $('rl-cancel').addEventListener('click', () => {
     generation++; learner = null; activeReceipt = null; busy(false);
     $('rl-progress').value = 0;
-    $('rl-results').hidden = true; $('rl-export').disabled = true;
+    $('rl-results').hidden = true; $('rl-idle').hidden = false; $('rl-export').disabled = true;
     $('rl-status').textContent = 'Training cancelled. The partial policy was discarded; the next run starts from zero.';
   });
   $('rl-form').addEventListener('submit', async event => {
     event.preventDefault();
     const thisRun = ++generation;
-    $('rl-error').hidden = true; $('rl-results').hidden = true; activeReceipt = null;
+    $('rl-error').hidden = true; $('rl-results').hidden = true; $('rl-idle').hidden = false; activeReceipt = null;
     try {
       environment = createEvidenceEnvironment(corpus, { question: $('rl-question').value, budget: Number($('rl-budget').value), cost: Number($('rl-cost').value), excluded_paper_ids: [...document.querySelectorAll('[name="rl-exclude"]:checked')].map(input => input.value) });
       learner = createQLearner(environment, { seed: Number($('rl-seed').value), episodes: Number($('rl-episodes').value) });
       busy(true); $('rl-progress').value = 0; $('rl-progress').max = Number($('rl-episodes').value);
-      $('rl-results').hidden = false; $('rl-comparisons').replaceChildren(); $('rl-trajectory').replaceChildren(); $('rl-curve-table').replaceChildren();
+      $('rl-results').hidden = false; $('rl-idle').hidden = true; $('rl-comparisons').replaceChildren(); $('rl-trajectory').replaceChildren(); $('rl-curve-table').replaceChildren();
       $('rl-gap').textContent = ''; $('rl-fingerprint').textContent = '';
       renderCandidates(environment); drawCurve(learner.snapshot().curve);
       // Yield between real training batches so progress, cancellation and navigation remain responsive.
@@ -65,7 +65,7 @@ export function initializeRLArena(corpus, { getInvestigation, inspectSource }) {
       busy(false);
     } catch (error) {
       if (thisRun !== generation) return;
-      activeReceipt = null; busy(false); $('rl-results').hidden = true;
+      activeReceipt = null; busy(false); $('rl-results').hidden = true; $('rl-idle').hidden = false;
       $('rl-error').hidden = false; $('rl-error').textContent = error.message || 'The experiment could not run.';
       $('rl-status').textContent = 'No completed policy is available. Adjust the settings and try again.';
     }
@@ -88,13 +88,13 @@ export function initializeRLArena(corpus, { getInvestigation, inspectSource }) {
     const svgNode = (tag, attrs, text) => { const node = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value); if (text !== undefined) node.textContent = text; return node; };
     svg.replaceChildren(svgNode('title', {}, 'Training on this question: greedy policy return and exploration return'), svgNode('desc', {}, 'Reward is a lexical proxy, not answer accuracy. Exact checkpoint values are in the table below.'));
     for (const value of [min + 0.15, 0, max - 0.15]) {
-      svg.append(svgNode('line', { x1: 54, x2: 674, y1: y(value), y2: y(value), stroke: '#dadbd3' }), svgNode('text', { x: 44, y: y(value) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#5c665f' }, value.toFixed(1)));
+      svg.append(svgNode('line', { x1: 54, x2: 674, y1: y(value), y2: y(value), stroke: '#d7d4ca' }), svgNode('text', { x: 44, y: y(value) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#565954' }, value.toFixed(1)));
     }
-    for (const [key, color] of [['exploration_mean_return', '#b17745'], ['greedy_return', '#246151']]) {
+    for (const [key, color] of [['exploration_mean_return', '#777b76'], ['greedy_return', '#c43d20']]) {
       const points = curve.filter(item => Number.isFinite(item[key])).map(item => `${x(item.episode)},${y(item[key])}`).join(' ');
-      svg.append(svgNode('polyline', { points, fill: 'none', stroke: color, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }));
+      svg.append(svgNode('polyline', { points, fill: 'none', stroke: color, 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-dasharray': key === 'exploration_mean_return' ? '5 5' : 'none' }));
     }
-    svg.append(svgNode('text', { x: 54, y: 209, 'font-size': 11, fill: '#5c665f' }, '0 episodes'), svgNode('text', { x: 674, y: 209, 'text-anchor': 'end', 'font-size': 11, fill: '#5c665f' }, `${total.toLocaleString()} episodes`));
+    svg.append(svgNode('text', { x: 54, y: 209, 'font-size': 11, fill: '#565954' }, '0 episodes'), svgNode('text', { x: 674, y: 209, 'text-anchor': 'end', 'font-size': 11, fill: '#565954' }, `${total.toLocaleString()} episodes`));
   }
   function renderResults(value) {
     const policy = value.training.policy;
