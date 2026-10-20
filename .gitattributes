@@ -7,3 +7,4 @@
 *.jsonl text eol=lf
 *.html text eol=lf
 *.css text eol=lf
+*.txt text eol=lf

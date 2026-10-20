@@ -11,3 +11,8 @@ Changes: paper subsampling; paragraph trimming, whitespace-normalized deduplicat
 ## Original eight-excerpt preview
 
 Paper excerpts remain third-party text under their respective rights. Individual records and `docs/DATASET_CARD.md` distinguish verified source licenses from unknown permission. Original Aurora curator commentary is separate. The seed collection is a limited excerpt demonstration, not the QASPER study collection. MIT does not relicense those quotations. No general reuse permission is inferred merely from public access or excerpt length.
+
+
+## Ranker v2 training dependencies
+
+The CPU research pipeline uses external LightGBM4.6.0, NumPy2.2.6 and SciPy1.15.3 under their own upstream licenses. They are installed through the pinned research requirements, not vendored or served by the website. Browser inference uses Aurora code and exported learned numeric trees. V2 QASPER data retains the dataset credit/license/modification distinctions above; training-only statistics, feature extraction, query-group selection, validation search and fresh-paper evaluation are additional Aurora transformations. V1 data and results remain separate historical records.

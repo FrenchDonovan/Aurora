@@ -7,13 +7,16 @@ export async function acceptAurora(tab,browser){
   const check=(ok,label)=>{if(!ok)throw Error(`Acceptance failed: ${label}`);results.push(label);};
   const observe=()=>tab.getAXState({emit:false});
   const id=id=>p.locator(`#${id}`);
-  await id('study-content').waitFor({state:'visible'});await observe();
-  check((await id('study-verdict').innerText()).includes('No improvement is claimed'),'Negative result visible');
+  await id('study-content').waitFor({state:'visible',timeoutMs:30000});await observe();
+  check((await id('study-verdict').innerText()).includes('relative improvement in this pilot'),'Fresh scoped result visible');
+  check((await id('study-commit').getAttribute('href')).includes('/commit/2a5be474'),'Pre-test freeze link visible');
+  check((await id('study-atlas-summary').innerText()).includes('lost on 27'),'Fresh losses remain visible');
+  const originalQuestion=await id('study-question').evaluate(el=>el.value);
   await id('study-method').selectOption('learned');await id('study-run').click();await observe();
-  check((await id('study-run-summary').innerText()).includes('Experimental logistic'),'Actual learned replay');
+  check((await id('study-run-summary').innerText()).includes('CPU LambdaRank'),'Actual trained LambdaRank replay');
   await id('study-example').selectOption('');await observe();
   check(!await id('study-remove-references').isEnabled()&&!await id('study-control').isEnabled(),'Changed example clears stale reference actions');
-  await id('study-question').fill('Which domain are the conversations in?');await id('study-run').click();await observe();
+  await id('study-question').fill(originalQuestion);await id('study-run').click();await observe();
   check(await id('study-remove-references').isEnabled(),'Successful matching replay restores reference actions');
   const original=await id('study-paragraphs').innerText();
   await id('study-remove-references').click();await observe();
@@ -24,7 +27,10 @@ export async function acceptAurora(tab,browser){
   check(!(await id('study-removed').innerText()).startsWith('0 paragraphs'),'Matched control applied');
   await id('study-restore').click();
   const studyDownload=p.waitForEvent('download');await id('study-export').click();
-  check(!!await(await studyDownload).path(),'Study receipt actually downloaded');await observe();
+  const studyPath=await(await studyDownload).path();check(!!studyPath,'Study receipt actually downloaded');await observe();
+  await p.getByRole('button',{name:'Open the original negative study ↗',exact:true}).click();await id('history-content').waitFor({state:'visible',timeoutMs:30000});await observe();
+  check((await id('history-verdict').innerText()).includes('No improvement is claimed'),'Original negative study preserved');
+  await p.getByRole('button',{name:'Return to the fresh v2 study ↗',exact:true}).click();await observe();
   await p.getByRole('button',{name:'01 Evidence lab',exact:true}).click();await observe();
   await id('question').fill('How does quantization affect memory and accuracy?');await id('ask-button').click();await observe();
   check(await id('result').isVisible(),'Custom investigation submits');
@@ -71,5 +77,5 @@ export async function acceptAurora(tab,browser){
       check(await id('study-run').isVisible(),`Primary study action reachable at ${size.width}`);
     }
   }finally{await viewport.reset();}
-  return {workflow:'Aurora public-UI acceptance v1',passed:results.length,checks:results};
+  return {workflow:'Aurora public-UI acceptance v2',passed:results.length,checks:results,studyReceiptPath:studyPath};
 }

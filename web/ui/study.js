@@ -1,18 +1,18 @@
-import { createEngine, sha256 } from '../lib/engine.js?v=aurora-study-v1';
-const $ = id => document.getElementById(id);
+import { createEngine, sha256 } from '../lib/engine.js?v=aurora-ranker-v2';
+const $ = id => document.getElementById(id.replace(/^study-/,'history-'));
 const node = (tag,text,cls) => {const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n;};
 const button = (label,fn) => {const b=node('button',label,'text-button');b.type='button';b.addEventListener('click',fn);return b;};
 const pct = n => `${(n*100).toFixed(1)}%`;
 const norm = s => s.normalize('NFKC').trim().replace(/\s+/gu,' ').toLowerCase();
 let pending;
-export function initializeStudy() {
+export function initializeHistoricalStudy() {
   if(pending)return pending;
   pending=load().catch(error=>{$('study-status').textContent=`Study unavailable: ${error.message}. Reload to retry; no results have been generated.`;});
   return pending;
 }
 async function load() {
   const hashes={};
-  const fetchJSON=async name=>{const r=await fetch(`./data/study/${name}.json?v=aurora-study-v1`);if(!r.ok)throw Error(`Could not load ${name}`);const text=await r.text();hashes[name]=sha256(text.trimEnd());return JSON.parse(text);};
+  const fetchJSON=async name=>{const r=await fetch(`./data/study/${name}.json?v=aurora-ranker-v2`);if(!r.ok)throw Error(`Could not load ${name}`);const text=await r.text();hashes[name]=sha256(text.trimEnd());return JSON.parse(text);};
   const [corpus,model,report,predictions,audit]=await Promise.all(['corpus','model','report','predictions','rl-audit'].map(fetchJSON));
   if(hashes.corpus!==report.manifest.corpus_sha256 || hashes.model!==report.freeze.model_sha256 || hashes.predictions!==report.predictions_sha256)throw Error('Study fingerprint mismatch');
   const engine=createEngine(corpus,{model});

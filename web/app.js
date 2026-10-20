@@ -1,11 +1,12 @@
-import { initializeStudy } from './ui/study.js?v=aurora-study-v1';
-import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js?v=aurora-study-v1';
-import { initializeEngine } from './ui/model-loader.js?v=aurora-study-v1';
-import { initializeRLArena } from './ui/rl-arena.js?v=aurora-study-v1';
+import { initializeHistoricalStudy } from './ui/study.js?v=aurora-ranker-v2';
+import { initializeStudy } from './ui/study-v2.js?v=aurora-ranker-v2';
+import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js?v=aurora-ranker-v2';
+import { initializeEngine } from './ui/model-loader.js?v=aurora-ranker-v2';
+import { initializeRLArena } from './ui/rl-arena.js?v=aurora-ranker-v2';
 
 const $ = id => document.getElementById(id);
 const state = { corpus: null, engine: null, evaluation: null, original: null, current: null, exclusions: new Set(), challenge: null, runs: 0, hash: null, modelHash: null, modelNote: '', sourceFocus: null };
-const APP_VERSION = 'aurora-study-v1';
+const APP_VERSION = 'aurora-ranker-v2';
 const normalized = value => value.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase();
 const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
@@ -207,15 +208,16 @@ function renderLibrary() {
   if (!papers.length) $('source-library').append(element('p', 'no-matches', 'No matching papers in this collection.'));
 }
 function changeView(view) {
-  if (!['study', 'lab', 'rl', 'corpus', 'methods'].includes(view)) return;
+  if (!['study', 'history', 'lab', 'rl', 'corpus', 'methods'].includes(view)) return;
   if (window.location.hash !== `#${view}`) window.history.pushState(null, '', `#${view}`);
-  for (const name of ['study', 'lab', 'rl', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
+  for (const name of ['study', 'history', 'lab', 'rl', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
   document.querySelectorAll('.main-nav [data-view]').forEach(button => {
     if (button.dataset.view === view) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   });
-  const heading = $(({study:'study-title',lab:'lab-title', rl:'rl-title', corpus:'corpus-title', methods:'methods-title'})[view]);
+  const heading = $(({study:'study-title',history:'history-title',lab:'lab-title', rl:'rl-title', corpus:'corpus-title', methods:'methods-title'})[view]);
   heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true });
   if (view === 'study') initializeStudy();
+  if (view === 'history') initializeHistoricalStudy();
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
 function renderEvaluation() {
@@ -224,7 +226,7 @@ function renderEvaluation() {
   $('evaluation-title').textContent = notRun ? 'Seed demo: not evaluated.' : evaluation.status === 'pilot' ? 'Exploratory pilot · not confirmatory.' : 'Recorded evaluation results.';
   $('evaluation-note').textContent = evaluation?.note ?? 'The evaluation artifact could not be loaded. Open the QASPER study for its separate recorded pilot.';
   const details = $('evaluation-details');
-  details.replaceChildren(element('strong', '', notRun ? 'Separate QASPER study is now available.' : `Artifact status: ${evaluation.status}`), element('p', '', notRun ? 'This eight-excerpt seed collection has no held-out evaluation. Open the Study tab for real-data model results and negative findings on a separate known-paper QASPER task. No trained-model improvement is claimed. Engineering tests check behavior; they do not measure research quality.' : 'These are recorded offline measurements, not measurements of the current visitor’s question. Consult the run provenance before interpreting them.'));
+  details.replaceChildren(element('strong', '', notRun ? 'Separate QASPER study is now available.' : `Artifact status: ${evaluation.status}`), element('p', '', notRun ? 'This eight-excerpt seed collection has no held-out evaluation. Open Study for the fresh v2 LambdaRank comparison, and History for the original negative logistic result. Neither evaluates this seed collection. Engineering tests check behavior; they do not measure research quality.' : 'These are recorded offline measurements, not measurements of the current visitor’s question. Consult the run provenance before interpreting them.'));
   if (!notRun && evaluation.metrics?.length) {
     const list = element('ul');
     for (const metric of evaluation.metrics) if (typeof metric.value === 'number') list.append(element('li', '', `${metric.label ?? metric.name ?? metric.id}: ${metric.value}${metric.unit ? ` ${metric.unit}` : ''}`));

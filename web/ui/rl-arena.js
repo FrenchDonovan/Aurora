@@ -1,4 +1,4 @@
-import { createEvidenceEnvironment, createQLearner } from '../lib/rl.js?v=aurora-study-v1';
+import { createEvidenceEnvironment, createQLearner } from '../lib/rl.js?v=aurora-ranker-v2';
 
 const $ = id => document.getElementById(id);
 const make = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };

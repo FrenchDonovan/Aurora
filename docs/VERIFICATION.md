@@ -1,3 +1,5 @@
+> Current v2 release: a fresh-test CPU LambdaRank study now outperforms both BM25 variants. See [v2 results and reproduction](RANKER_V2_RESULTS.md) for exact scope, pre-test commit, model and data provenance. The material below is the historical v1/seed record; its negative results remain preserved.
+
 > Updated 20 October 2026: a separate real-data QASPER pilot is now released. See [the study documentation](QASPER_STUDY.md) and root README for current model/results. The original eight-excerpt seed collection remains untrained/unmeasured. The dated material below describes that original collection and pipeline; it does not negate or validate the separate study.
 
 # Aurora engineering-preview verification

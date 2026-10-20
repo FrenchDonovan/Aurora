@@ -1,5 +1,5 @@
 /** Query-local tabular Q-learning. Reward is an explicit lexical proxy, never truth. */
-import { tokenize, corpusHash, createEngine } from './engine.js?v=aurora-study-v1';
+import { tokenize, corpusHash, createEngine } from './engine.js?v=aurora-ranker-v2';
 
 export const RL_VERSION = 'aurora-evidence-mdp-v1';
 const check = (condition, message) => { if (!condition) throw new Error(message); };
