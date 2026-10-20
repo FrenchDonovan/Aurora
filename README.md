@@ -1,42 +1,44 @@
-# Aurora — Evidence Stress Lab
+# Aurora — Evidence Selection & Failure Lab
 
-**Ask a research question. Inspect the evidence. Stress-test the answer.**
+**A working CPU ML experiment. Including the result that did not work.**
 
-**[Try the live demo](https://aurora-evidence-stress-lab.starryshark33.chatgpt.site/)** — public engineering preview; no account, installation, or API key required.
+[Live study](https://aurora-evidence-stress-lab.starryshark33.chatgpt.site/#study) · [Frozen protocol](research/QASPER_PROTOCOL.md) · [Reproduce and inspect results](docs/QASPER_STUDY.md) · [Third-party rights](THIRD_PARTY_NOTICES.md)
 
-Aurora is a public, interactive research evidence lab in its initial engineering-preview stage. Visitors can ask new questions over a bounded collection of actual paper excerpts, inspect sources, remove papers, and rerun the investigation. The implementation deliberately distinguishes relevance from scientific support and truth.
+Choose an NLP paper, replay a human research question or write your own, compare BM25 with an actual trained logistic ranker, and remove paragraphs before reranking. Inspect the source, partial human reference annotations, failure atlas and exportable fingerprints. Visitor ranking runs locally; no paid API, GPU or login is required.
 
-## Current implementation wave
+## Recorded results
 
-Three implementation agents completed the first public-interface, retrieval/CPU research-tooling, and verified-corpus workstreams. A fourth independent reviewer produced 17 findings; the plan and implementation were revised accordingly. Read [the implementation plan](IMPLEMENTATION_PLAN.md), [independent review](docs/PLAN_REVIEW.md), and [integration contract](docs/CONTRACTS.md) for the scope and open release gates.
+The deterministic QASPER v0.3 subset contains **112 papers and 5,329 contextual paragraphs**. Labels are paper-disjoint: 64 training papers, 16 validation papers, 32 test papers selected by hash. Predetermined eligibility produces 163 training questions / **7,814 question–paragraph pairs**, 46 validation questions and **100 test questions from 31 papers**. The model was saved before locally inspecting test annotations. IDF uses all unlabeled selected texts: this is a **transductive fixed-collection pilot**, not unseen-document generalization.
 
-The dependable first mode is an **extractive evidence brief** running locally in the visitor's browser. It does not require a paid model API, installed model, account or GPU. It uses a curated excerpt collection rather than full-paper indexing or a complete literature search. A learned mode remains unavailable until a legitimate, compatible trained artifact exists. The engineering preview is publicly deployed at the demo link above. No held-out improvement is claimed.
+| Method | Test nDCG@5 | MRR@5 | Reference recall@5 |
+|---|---:|---:|---:|
+| BM25 | 0.306 | 0.339 | 0.407 |
+| Query-token coverage | 0.314 | 0.364 | 0.391 |
+| CPU logistic ranker | 0.072 | 0.092 | 0.107 |
 
-## Interactive reinforcement learning
+Questions average within paper, then papers equally. Learned-minus-BM25 nDCG is **−0.234**, paired 95% paper-bootstrap interval **[−0.323, −0.159]**, 1,000 resamples. No improvement is claimed. BM25 remains the default. Every eligible test query and its predictions, including zero-recall cases, is public. Annotations come from QASPER humans; unselected paragraphs are assumed negatives, not individually verified negatives. This is known-paper paragraph retrieval, not official QASPER answer F1, generative QA, semantic verification or a new algorithm. See the [full study](docs/QASPER_STUDY.md) for omissions, leakage limitations and the failed learner's coefficients.
 
-The **RL arena** trains a tabular Q-learning policy to choose excerpts and STOP under an evidence budget. Visitors can vary reading cost, source exclusions, seed and training duration; inspect live return curves and decision traces; compare against random, greedy and exact-optimal strategies; and export the Q-table and full experiment receipt. This optimizes an explicit lexical coverage reward for the current question. It does not establish scientific accuracy or generalization. See [the MDP, learning update, controls and limitations](docs/RL_ARENA.md).
+## Reinforcement learning and reward mismatch
 
-## Local development
+The interactive arena implements real tabular Q-learning, epsilon-greedy exploration, TD updates, STOP and a reading budget. Receipts include Q-values, visits, trajectories, curves, greedy/random baselines and an exact subset oracle. Every question/environment gets a fresh policy trained from zero.
 
-Node.js 20+ is enough for the website. No npm dependencies are required.
+A predeclared audit uses **20 QASPER questions × five seeds × 3,000 episodes**, eight BM25 candidates per environment. All 100 runs reach their lexical proxy optimum; 15 runs (three repeated environments) beat greedy, none lose. Mean reference recall is **17.0%**, versus greedy **13.3%**. Proxy optimality is not semantic evidence quality. There is no policy-transfer, deep-RL, RLHF or held-out RL generalization claim. [Full audit](web/data/study/rl-audit.json).
 
-```sh
-node scripts/validate-corpus.mjs
+## Run and verify
+
+Node 18+, Python 3.10+, standard libraries only:
+
+```text
 node scripts/test.mjs
+python -m unittest discover -s tests -p "test_*.py" -v
 node scripts/build.mjs
-node scripts/serve.mjs
+node scripts/serve.mjs --port=4183
 ```
 
-Open the printed loopback URL. On this Windows computer, `./aurora.ps1 start` locates the bundled Node runtime and builds/serves the app. `./aurora.ps1 test` runs JavaScript checks. Offline research tools use Python 3.11+; see `research/README.md` as that workstream lands.
+Open the printed local URL. [Reproduce the research run](docs/QASPER_STUDY.md). `scripts/browser-acceptance.mjs` is an executable public-UI workflow for a supplied Codex CUA Tab/Browser, separate from unit tests. See [review remediation](docs/REVIEW_REMEDIATION.md) for observed verification and limits. Now-public test labels are a development resource for future changes, not an untouched confirmatory set.
 
-## What is distinctive
+## Project boundaries
 
-The central interaction is a real rerun after evidence exclusion, accompanied by inspectable source provenance and an exportable result receipt. Existing research already studies citations, scientific claims and RAG evaluation. Aurora's originality must be demonstrated through its implementation, curated challenges, experiments and observed results; no first-ever algorithm claim is made.
+Evidence lab, Sources and the interactive RL arena retain a **separate eight-excerpt seed collection**, labeled as a development demonstration. Its `web/data/evaluation.json` remains `not_run`; the QASPER study does not validate that collection. Weak candidates are distinguished from brief-used excerpts. Relevance and the lexical brief gate do not establish truth, entailment or answerability. No hidden LLM generation occurs.
 
-Exact source excerpts are labeled separately from original curator notes. Scores measure relevance. Curator-reviewed claim relations apply only to unchanged development challenges. Open questions do not receive automatic support/contradiction judgments.
-
-## Project status and evidence
-
-Use `docs/VERIFICATION.md` and `docs/PLAN_REVIEW.md` when present for observed checks and unresolved issues. A results artifact with `status: not_run` means no research study has been completed. Synthetic fixtures test software behavior and do not establish real-world model quality.
-
-The previous coding-agent project is preserved under `legacy/coding-agent/` during migration. Its demonstrations and metrics are excluded from this website and its results.
+Aurora contributes an inspectable experiment and failure-removal workflow, not a first-ever algorithm. [Related work](docs/RELATED_WORK.md) discusses prior research. The old coding-agent prototype remains under `legacy/coding-agent/` and is excluded from production. MIT applies to original code; third-party text/data retain separate rights under [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

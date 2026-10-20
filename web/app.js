@@ -1,10 +1,11 @@
-import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js';
-import { initializeEngine } from './ui/model-loader.js';
-import { initializeRLArena } from './ui/rl-arena.js?v=aurora-r0-studio1';
+import { initializeStudy } from './ui/study.js?v=aurora-study-v1';
+import { compareResults, corpusHash, FEATURE_VERSION } from './lib/engine.js?v=aurora-study-v1';
+import { initializeEngine } from './ui/model-loader.js?v=aurora-study-v1';
+import { initializeRLArena } from './ui/rl-arena.js?v=aurora-study-v1';
 
 const $ = id => document.getElementById(id);
 const state = { corpus: null, engine: null, evaluation: null, original: null, current: null, exclusions: new Set(), challenge: null, runs: 0, hash: null, modelHash: null, modelNote: '', sourceFocus: null };
-const APP_VERSION = 'aurora-r0-studio1';
+const APP_VERSION = 'aurora-study-v1';
 const normalized = value => value.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase();
 const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
@@ -70,7 +71,7 @@ function renderResult() {
   $('run-count').textContent = `Run ${String(state.runs).padStart(2, '0')} · live local retrieval`;
   renderBrief(result);
   const papers = new Set(result.evidence.map(item => item.paper_id));
-  $('run-facts').replaceChildren(fact('selected excerpts', result.evidence.length), fact('distinct papers', papers.size), fact('response', result.response_mode), fact('method', result.method === 'bm25' ? 'BM25' : result.method));
+  $('run-facts').replaceChildren(fact('brief-used excerpts', result.claims.length), fact('retrieval candidates', result.evidence.length), fact('distinct papers', papers.size), fact('response', result.response_mode), fact('method', result.method === 'bm25' ? 'BM25' : result.method));
   const challenge = state.corpus.challenges.find(item => item.id === result.challenge_id);
   $('challenge-note').hidden = !challenge;
   if (challenge) {
@@ -100,6 +101,8 @@ function renderEvidence(item, index, added) {
   const authors = item.authors.length > 2 ? `${item.authors[0]} et al.` : item.authors.join(' & ');
   titleBlock.append(title, element('p', 'paper-meta', `${authors} · ${item.year}${added ? ' · newly selected after removal' : ''}`));
   head.append(citation, titleBlock);
+  article.append(element('p', 'candidate-state', item.used_in_brief ? 'USED IN EXTRACTIVE BRIEF · lexical gate passed' : 'WEAK RETRIEVAL CANDIDATE · excluded from brief'));
+  article.append(element('p', 'selection-basis', `Text matches: ${item.matched_text_terms.join(', ') || 'none'} · Title matches: ${item.matched_title_terms.join(', ') || 'none'}. This does not establish semantic support.`));
   article.append(head, element('p', 'quote-label', `EXACT EXCERPT · ${item.section}`), element('blockquote', '', item.text));
   if (item.curator_note) { const note = element('p', 'curator-note'); note.append(element('strong', '', 'Curator context · '), document.createTextNode(item.curator_note)); article.append(note); }
   if (item.curated_relation) {
@@ -204,23 +207,24 @@ function renderLibrary() {
   if (!papers.length) $('source-library').append(element('p', 'no-matches', 'No matching papers in this collection.'));
 }
 function changeView(view) {
-  if (!['lab', 'rl', 'corpus', 'methods'].includes(view)) return;
-  if (window.location.hash !== `#${view}`) window.history.replaceState(null, '', `#${view}`);
-  for (const name of ['lab', 'rl', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
+  if (!['study', 'lab', 'rl', 'corpus', 'methods'].includes(view)) return;
+  if (window.location.hash !== `#${view}`) window.history.pushState(null, '', `#${view}`);
+  for (const name of ['study', 'lab', 'rl', 'corpus', 'methods']) $(`view-${name}`).hidden = name !== view;
   document.querySelectorAll('.main-nav [data-view]').forEach(button => {
     if (button.dataset.view === view) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   });
-  const heading = $(({lab:'lab-title', rl:'rl-title', corpus:'corpus-title', methods:'methods-title'})[view]);
+  const heading = $(({study:'study-title',lab:'lab-title', rl:'rl-title', corpus:'corpus-title', methods:'methods-title'})[view]);
   heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true });
+  if (view === 'study') initializeStudy();
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
 function renderEvaluation() {
   const evaluation = state.evaluation;
   const notRun = !evaluation || evaluation.status === 'not_run';
-  $('evaluation-title').textContent = notRun ? 'Not measured yet.' : evaluation.status === 'pilot' ? 'Exploratory pilot · not confirmatory.' : 'Recorded evaluation results.';
-  $('evaluation-note').textContent = evaluation?.note ?? 'The evaluation artifact could not be loaded. No research performance is claimed.';
+  $('evaluation-title').textContent = notRun ? 'Seed demo: not evaluated.' : evaluation.status === 'pilot' ? 'Exploratory pilot · not confirmatory.' : 'Recorded evaluation results.';
+  $('evaluation-note').textContent = evaluation?.note ?? 'The evaluation artifact could not be loaded. Open the QASPER study for its separate recorded pilot.';
   const details = $('evaluation-details');
-  details.replaceChildren(element('strong', '', notRun ? 'A results panel is not a result.' : `Artifact status: ${evaluation.status}`), element('p', '', notRun ? 'No held-out scores or trained-model improvement are claimed. Source-paper findings describe those papers, not Aurora. Engineering tests check behavior; they do not measure research quality.' : 'These are recorded offline measurements, not measurements of the current visitor’s question. Consult the run provenance before interpreting them.'));
+  details.replaceChildren(element('strong', '', notRun ? 'Separate QASPER study is now available.' : `Artifact status: ${evaluation.status}`), element('p', '', notRun ? 'This eight-excerpt seed collection has no held-out evaluation. Open the Study tab for real-data model results and negative findings on a separate known-paper QASPER task. No trained-model improvement is claimed. Engineering tests check behavior; they do not measure research quality.' : 'These are recorded offline measurements, not measurements of the current visitor’s question. Consult the run provenance before interpreting them.'));
   if (!notRun && evaluation.metrics?.length) {
     const list = element('ul');
     for (const metric of evaluation.metrics) if (typeof metric.value === 'number') list.append(element('li', '', `${metric.label ?? metric.name ?? metric.id}: ${metric.value}${metric.unit ? ` ${metric.unit}` : ''}`));
@@ -302,7 +306,7 @@ async function initialize() {
     }));
     $('corpus-summary').textContent = `${state.corpus.papers.length} papers · ${state.corpus.passages.length} excerpts · ${state.corpus.domain}. Corpus ${state.corpus.corpus_version}. ${state.corpus.provenance_note ?? ''}`;
     initializeRLArena(state.corpus, { getInvestigation: () => state.current, inspectSource: openSource });
-    if (window.location.hash) changeView(window.location.hash.slice(1));
+    changeView(window.location.hash.slice(1) || 'study');
     renderLibrary(); renderSourceField(); renderEvaluation(); $('ask-button').disabled = false; setStatus('Ready. Choose an example or investigate your own question.');
   } catch (error) { showError(error.message || 'The lab could not initialize. Please refresh the page.'); setStatus('The lab is unavailable. No result has been generated.'); $('evaluation-note').textContent = 'Application data could not be loaded. No research performance is claimed.'; }
 }
@@ -323,5 +327,5 @@ $('source-search').addEventListener('input', renderLibrary);
 $('export-json').addEventListener('click', () => download('json'));
 $('export-markdown').addEventListener('click', () => download('markdown'));
 document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => changeView(button.dataset.view)));
-window.addEventListener('hashchange', () => changeView(window.location.hash.slice(1) || 'lab'));
+window.addEventListener('hashchange', () => changeView(window.location.hash.slice(1) || 'study')); 
 initialize();

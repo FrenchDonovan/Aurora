@@ -55,7 +55,7 @@ function validateCorpus(corpus) {
   for (const paper of corpus.papers) {
     invariant(isRecord(paper) && nonempty(paper.id) && !papers.has(paper.id), 'Paper IDs must be nonempty and unique.');
     invariant(nonempty(paper.title) && https(paper.url), `Invalid title or HTTPS URL for paper ${paper.id}.`);
-    invariant(Array.isArray(paper.authors) && paper.authors.length > 0 && paper.authors.every(nonempty), `Invalid authors for ${paper.id}.`);
+    invariant(Array.isArray(paper.authors) && (paper.authors.length > 0 || paper.dataset_partition) && paper.authors.every(nonempty), `Invalid authors for ${paper.id}.`);
     invariant(Number.isInteger(paper.year) && paper.year >= 1900 && paper.year <= 2200, `Invalid year for ${paper.id}.`);
     invariant(Array.isArray(paper.topics) && paper.topics.every(nonempty) && typeof paper.curator_note === 'string', `Invalid topics/note for ${paper.id}.`);
     invariant(isRecord(paper.license) && ['unknown','verified','restricted'].includes(paper.license.status), `Invalid license status for ${paper.id}.`);
@@ -65,7 +65,7 @@ function validateCorpus(corpus) {
   for (const passage of corpus.passages) {
     invariant(isRecord(passage) && nonempty(passage.id) && !passages.has(passage.id), 'Passage IDs must be nonempty and unique.');
     invariant(papers.has(passage.paper_id), `Unknown paper for passage ${passage.id}.`);
-    invariant(nonempty(passage.text) && passage.text.length <= 12000 && passage.text_kind === 'verbatim_excerpt', `Invalid source text for passage ${passage.id}.`);
+    invariant(nonempty(passage.text) && passage.text.length <= 12000 && ['verbatim_excerpt','dataset_paragraph'].includes(passage.text_kind), `Invalid source text for passage ${passage.id}.`);
     invariant(nonempty(passage.section) && https(passage.source_url) && typeof passage.curator_note === 'string', `Invalid provenance for passage ${passage.id}.`);
     if (passage.text_sha256 !== undefined) invariant(passage.text_sha256 === sha256(passage.text), `Text hash mismatch for ${passage.id}.`);
     passages.set(passage.id, passage);
@@ -137,16 +137,21 @@ export function createEngine(inputCorpus, { model: inputModel = null } = {}) {
   // A caller cannot mutate a validated index or model after construction.
   const corpus = JSON.parse(JSON.stringify(inputCorpus)); validateCorpus(corpus);
   const hash = corpusHash(corpus), index = indexCorpus(corpus);
+  const datasetExtracts = corpus.passages.some(passage => passage.text_kind === 'dataset_paragraph');
   const model = inputModel === null ? null : JSON.parse(JSON.stringify(inputModel));
   if (model !== null) validateModel(model, corpus, hash);
   const available_methods = [{ id: 'bm25', label: 'BM25 baseline', available: true, reason: null }, { id: 'learned', label: 'CPU-trained relevance ranker', available: model !== null, reason: model ? null : 'No reviewed-data trained model is installed. The lexical baseline is available.' }];
-  function ask({ question, method = 'bm25', excluded_paper_ids = [], top_k = 5, challenge_id = null } = {}) {
+  function ask({ question, method = 'bm25', excluded_paper_ids = [], excluded_passage_ids = [], paper_id = null, top_k = 5, challenge_id = null } = {}) {
     const started = globalThis.performance?.now() ?? Date.now();
     invariant(typeof question === 'string' && question.trim().length > 0 && question.length <= 1200, 'Enter a nonempty question of at most 1,200 characters.');
     invariant(method === 'bm25' || method === 'learned', 'Unknown retrieval method.');
     invariant(method !== 'learned' || model !== null, 'Learned ranking is unavailable: no reviewed-data trained model is installed.');
     invariant(Array.isArray(excluded_paper_ids) && excluded_paper_ids.every(nonempty), 'Excluded paper IDs must be an array of nonempty IDs.');
     const known = new Set(corpus.papers.map(paper => paper.id));
+    invariant(paper_id === null || known.has(paper_id), 'Unknown paper scope.');
+    const passageIds = new Set(corpus.passages.map(passage => passage.id));
+    invariant(Array.isArray(excluded_passage_ids) && excluded_passage_ids.every(id => passageIds.has(id)), 'Unknown excluded passage.');
+    const removedPassages = new Set(excluded_passage_ids);
     for (const id of excluded_paper_ids) invariant(known.has(id), `Unknown excluded paper ID: ${id}.`);
     invariant(Number.isInteger(top_k) && top_k >= 1 && top_k <= 20, 'top_k must be an integer between 1 and 20.');
     invariant(challenge_id === null || typeof challenge_id === 'string', 'Invalid challenge ID.');
@@ -155,7 +160,8 @@ export function createEngine(inputCorpus, { model: inputModel = null } = {}) {
     const activeChallenge = challenge && normalizeQuestion(challenge.question) === normalizeQuestion(question) ? challenge : null;
     const exclusions = unique(excluded_paper_ids).sort(cmp), excluded = new Set(exclusions), query = tokenize(question);
     // Index statistics stay frozen across stress runs; source filtering precedes candidate scoring and selection.
-    const candidates = index.docs.filter(doc => !excluded.has(doc.paper.id)).map(doc => {
+    const allowed = index.docs.filter(doc => !excluded.has(doc.paper.id) && !removedPassages.has(doc.passage.id) && (paper_id === null || doc.paper.id === paper_id));
+    const candidates = allowed.map(doc => {
       const lexical = bm25(index, query, doc), features = featureVector(question, doc, lexical);
       const linear = model ? model.bias + features.reduce((sum, value, i) => sum + value * model.weights[i], 0) : 0;
       return { doc, lexical, features, score: method === 'learned' ? 1 / (1 + Math.exp(-Math.max(-700, Math.min(700, linear)))) : lexical };
@@ -172,20 +178,20 @@ export function createEngine(inputCorpus, { model: inputModel = null } = {}) {
     const evidence = selected.map(({ doc, score, lexical }) => {
       const { paper, passage } = doc;
       const relation = activeChallenge?.relations.find(item => item.passage_id === passage.id);
-      return { passage_id: passage.id, paper_id: paper.id, title: paper.title, authors: [...paper.authors], year: paper.year, url: paper.url, source_url: passage.source_url, text: passage.text, section: passage.section, text_kind: passage.text_kind, text_sha256: sha256(passage.text), curator_note: passage.curator_note, score, lexical_score: lexical, score_kind: method === 'learned' ? 'learned_relevance_not_confidence' : 'bm25_relevance', curated_relation: relation ? { relation: relation.relation, rationale: relation.rationale, review: { ...(activeChallenge.review || {}), independent_human_review: activeChallenge.review?.independent_human_review === true } } : null };
+      return { passage_id: passage.id, paper_id: paper.id, title: paper.title, authors: [...paper.authors], year: paper.year, url: paper.url, source_url: passage.source_url, text: passage.text, section: passage.section, text_kind: passage.text_kind, text_sha256: sha256(passage.text), curator_note: passage.curator_note, used_in_brief: meaningful.includes(candidates.find(item => item.doc.passage.id === passage.id)), matched_text_terms: unique(query).filter(token => doc.fields.text.includes(token)), matched_title_terms: unique(query).filter(token => doc.fields.title.includes(token)), score, lexical_score: lexical, score_kind: method === 'learned' ? 'learned_relevance_not_confidence' : 'bm25_relevance', curated_relation: relation ? { relation: relation.relation, rationale: relation.rationale, review: { ...(activeChallenge.review || {}), independent_human_review: activeChallenge.review?.independent_human_review === true } } : null };
     });
     const meaningfulIds = new Set(meaningful.map(item => item.doc.passage.id));
     const claims = answerable ? evidence.filter(item => meaningfulIds.has(item.passage_id)).map(item => ({ text: item.text, passage_ids: [item.passage_id], kind: 'extractive' })) : [];
-    const brief = answerable ? `Relevant indexed excerpts (exact source wording; relevance is not verification):\n${claims.map(claim => `“${claim.text}” [${claim.passage_ids[0]}]`).join('\n')}` : 'I do not have enough relevant evidence in this indexed collection to produce an evidence brief. This does not establish that no evidence exists elsewhere.';
+    const brief = answerable ? `Relevant indexed excerpts (${datasetExtracts ? 'QASPER-extracted dataset wording; not independently checked against current PDFs' : 'exact source wording'}; relevance is not verification):\n${claims.map(claim => `“${claim.text}” [${claim.passage_ids[0]}]`).join('\n')}` : 'I do not have enough relevant evidence in this indexed collection to produce an evidence brief. This does not establish that no evidence exists elsewhere.';
     const elapsed = (globalThis.performance?.now() ?? Date.now()) - started;
-    return { schema_version: 1, question: question.trim(), method, corpus_version: corpus.corpus_version, corpus_sha256: hash, model_id: method === 'learned' ? model.model_id : null, feature_version: FEATURE_VERSION, response_mode: 'extractive', status: answerable ? 'evidence_found' : 'insufficient_evidence', brief, excluded_paper_ids: exclusions, challenge_id: activeChallenge?.id ?? null, evidence, claims, limitations: ['Curated abstract/excerpt collection, not a complete literature review.', 'Relevance scores do not measure truth or entailment.', 'Evidence found means relevant excerpts passed a lexical heuristic; it does not mean the question was answered.', 'The insufficient-evidence gate is an uncalibrated lexical heuristic; it can miss paraphrases and accept related but unanswering excerpts.', ...(activeChallenge ? ['Curated relations apply only to this unchanged development challenge; they are not automatic scientific verification.'] : []), ...(method === 'learned' ? ['This relevance model is an exploratory pilot trained on reviewed judgments.'] : [])], diagnostics: { distinct_papers: new Set(evidence.map(item => item.paper_id)).size, candidate_count: candidates.length, allowed_passage_count: index.docs.length - index.docs.filter(doc => excluded.has(doc.paper.id)).length, elapsed_ms: Math.max(0, elapsed), gate: 'heuristic_v1', gate_min_text_overlap: 1, gate_min_combined_overlap: Math.min(2, unique(query).length), gate_min_combined_coverage: 0.35, top_k, index_statistics: 'fixed_full_corpus' } };
+    return { schema_version: 1, question: question.trim(), method, corpus_version: corpus.corpus_version, corpus_sha256: hash, model_id: method === 'learned' ? model.model_id : null, feature_version: FEATURE_VERSION, response_mode: 'extractive', status: answerable ? 'evidence_found' : 'insufficient_evidence', brief, paper_id, excluded_passage_ids: [...removedPassages].sort(cmp), excluded_paper_ids: exclusions, challenge_id: activeChallenge?.id ?? null, evidence, claims, limitations: [datasetExtracts ? 'QASPER v0.3 known-paper paragraph collection: dataset-extracted text, not independently verified current-PDF wording or a complete literature review.' : 'Curated abstract/excerpt collection, not a complete literature review.', 'Relevance scores do not measure truth or entailment.', 'Evidence found means relevant excerpts passed a lexical heuristic; it does not mean the question was answered.', 'The insufficient-evidence gate is an uncalibrated lexical heuristic; it can miss paraphrases and accept related but unanswering excerpts.', ...(activeChallenge ? ['Curated relations apply only to this unchanged development challenge; they are not automatic scientific verification.'] : []), ...(method === 'learned' ? [datasetExtracts ? 'Exploratory logistic pilot trained on reused QASPER human-selected references and assumed negatives. Unselected paragraphs were not individually verified as irrelevant. Test annotations are partial; unlabeled test texts informed fixed IDF. The pilot underperformed BM25; no improvement or semantic verification is claimed.' : 'This relevance model is an exploratory pilot trained on reviewed judgments.'] : [])], diagnostics: { distinct_papers: new Set(evidence.map(item => item.paper_id)).size, candidate_count: candidates.length, allowed_passage_count: allowed.length, elapsed_ms: Math.max(0, elapsed), gate: 'heuristic_v1', gate_min_text_overlap: 1, gate_min_combined_overlap: Math.min(2, unique(query).length), gate_min_combined_coverage: 0.35, top_k, index_statistics: 'fixed_full_corpus' } };
   }
   return { available_methods, ask };
 }
 
 export function compareResults(original, stressed) {
   invariant(isRecord(original) && isRecord(stressed) && Array.isArray(original.evidence) && Array.isArray(stressed.evidence), 'Compare requires two engine results.');
-  invariant(normalizeQuestion(original.question) === normalizeQuestion(stressed.question) && original.method === stressed.method && original.corpus_version === stressed.corpus_version && original.corpus_sha256 === stressed.corpus_sha256 && original.model_id === stressed.model_id && original.diagnostics?.top_k === stressed.diagnostics?.top_k, 'Compare requires the same question, corpus, model, method and top_k.');
+  invariant(normalizeQuestion(original.question) === normalizeQuestion(stressed.question) && original.method === stressed.method && original.paper_id === stressed.paper_id && original.corpus_version === stressed.corpus_version && original.corpus_sha256 === stressed.corpus_sha256 && original.model_id === stressed.model_id && original.diagnostics?.top_k === stressed.diagnostics?.top_k, 'Compare requires the same question, corpus, model, method and top_k.');
   const before = new Set(original.evidence.map(item => item.passage_id)), after = new Set(stressed.evidence.map(item => item.passage_id));
   const originalPapers = new Set(original.evidence.map(item => item.paper_id)), stressedPapers = new Set(stressed.evidence.map(item => item.paper_id));
   const retained = [...before].filter(id => after.has(id)).sort(cmp), union = new Set([...before, ...after]);

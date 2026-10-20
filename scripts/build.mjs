@@ -19,7 +19,8 @@ function inspect(directory) {
       inspect(target);
     } else {
       if (!allowed.has(path.extname(entry.name))) throw new Error(`Unsupported web asset: ${entry.name}`);
-      if (statSync(target).size > 2_000_000) throw new Error(`Asset too large: ${entry.name}`);
+      const publicStudyCorpus = path.relative(source, target).replaceAll('\\','/') === 'data/study/corpus.json';
+      if (statSync(target).size > (publicStudyCorpus ? 8_000_000 : 2_000_000)) throw new Error(`Asset too large: ${entry.name}`);
       if (['.js', '.json', '.html', '.css', '.svg', '.txt'].includes(path.extname(entry.name))) {
         const text = readFileSync(target, 'utf8');
         if (/"split"\s*:\s*"test"/.test(text) || /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)) throw new Error(`Private/test material found in ${entry.name}`);

@@ -150,3 +150,8 @@ Parent's `scripts/build.mjs` copies only `web/**` into `dist`, excludes test-onl
 ## RL arena extension — 2026-10-20
 
 The parent adds `web/lib/rl.js`, exporting `createEvidenceEnvironment`, `createQLearner`, `seededRandom` and `RL_VERSION`; and `web/ui/rl-arena.js`, initialized after corpus loading. The environment snapshots validated corpus data, filters exclusions before constructing actions, bounds the action/state space, and exposes transition rewards and exact/greedy/random controls. Receipts use a separate RL schema and retain the complete proxy reward and same-environment limitation. No RL policy enters `createEngine` or the supervised model artifact path. The research evaluation artifact remains unchanged. See `docs/RL_ARENA.md` for the exact MDP, update and reproducibility contract.
+
+
+## Review remediation API extension, 20 October 2026
+
+`ask` additionally accepts optional `paper_id` scope and `excluded_passage_ids`. Unknown IDs reject; scope/exclusions apply before scoring; full-corpus IDF stays fixed. Receipts preserve those settings. Every selected item exposes `used_in_brief`, `matched_text_terms` and `matched_title_terms`; weak retrieval candidates are distinct from brief-used text. `dataset_paragraph` is supported for licensed QASPER extraction, with explicit dataset provenance, without claiming verified current-PDF transcription. Authors may be absent only on dataset-partition records. Separate study corpus/model/artifacts live under `web/data/study/` and load only upon study navigation. Public released evaluation references are deliberate study artifacts, not private visitor data.

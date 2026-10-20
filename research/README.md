@@ -1,3 +1,5 @@
+> Updated 20 October 2026: a separate real-data QASPER pilot is now released. See [the study documentation](../docs/QASPER_STUDY.md) and root README for current model/results. The original eight-excerpt seed collection remains untrained/unmeasured. The dated material below describes that original collection and pipeline; it does not negate or validate the separate study.
+
 # Aurora CPU research pipeline
 
 This is working experimental infrastructure, **not a completed relevance study**. The public app runs deterministic BM25 over real short source excerpts. There is no trained production model and no held-out performance claim. The only included model coefficients live in a conspicuously synthetic unit-test parity fixture; the browser refuses to load them.

@@ -1,4 +1,4 @@
-import { createEngine, corpusHash } from '../lib/engine.js';
+import { createEngine, corpusHash } from '../lib/engine.js?v=aurora-study-v1';
 
 // An optional model failure cannot disable the independent lexical baseline.
 // Dependency injection lets the loader be tested without manufacturing a production model.

@@ -1,3 +1,5 @@
+> Updated 20 October 2026: a separate real-data QASPER pilot is now released. See [the study documentation](QASPER_STUDY.md) and root README for current model/results. The original eight-excerpt seed collection remains untrained/unmeasured. The dated material below describes that original collection and pipeline; it does not negate or validate the separate study.
+
 # Aurora seed dataset card
 
 Version: `seed-2026-10-16`. Created 2026-10-16. Status: public development corpus; not a benchmark, a training set, or a complete literature collection.

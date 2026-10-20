@@ -55,7 +55,7 @@ class CorpusIndex:
         for passage in corpus["passages"]:
             if passage["id"] in self.docs or passage["paper_id"] not in self.papers:
                 raise ValueError("Duplicate passage or unknown paper")
-            if passage.get("text_kind") != "verbatim_excerpt" or not isinstance(passage.get("text"), str) or not passage["text"].strip():
+            if passage.get("text_kind") not in {"verbatim_excerpt", "dataset_paragraph"} or not isinstance(passage.get("text"), str) or not passage["text"].strip():
                 raise ValueError("Only nonempty verbatim excerpts may be indexed")
             paper = self.papers[passage["paper_id"]]
             self.docs[passage["id"]] = {"passage": passage, "paper": paper, "fields": {"text": tokenize(passage["text"]), "title": tokenize(paper["title"]), "tags": tokenize(" ".join(paper["topics"]))}}
@@ -92,13 +92,13 @@ class CorpusIndex:
         union = qt | pt
         return [math.log1p(self.bm25(question, passage_id)), coverage(qt, pt), coverage(qt, doc["fields"]["title"]), coverage(bigrams(q), bigrams(doc["fields"]["text"])), len(qt & pt) / len(union) if union else 0.0, len(pt) / (len(pt) + 40), coverage([word for word in qt if any(unicodedata.category(char)[0] == "N" for char in word)], pt), coverage(qt, doc["fields"]["tags"])]
 
-    def rank(self, question, model=None, excluded_paper_ids=()):
+    def rank(self, question, model=None, excluded_paper_ids=(), paper_id=None):
         excluded = set(excluded_paper_ids)
         if excluded - self.papers.keys():
             raise ValueError("Unknown excluded paper IDs")
         ranking = []
         for passage_id, doc in self.docs.items():
-            if doc["paper"]["id"] in excluded:
+            if doc["paper"]["id"] in excluded or (paper_id is not None and doc['paper']['id'] != paper_id):
                 continue
             lexical = self.bm25(question, passage_id)
             if lexical <= 0:
@@ -136,3 +136,4 @@ def validate_model(model, corpus, allow_synthetic=False):
     if model.get("synthetic") is False and provenance.get("reviewed_train_rows") != provenance["train_rows"]:
         raise ValueError("Model requires reviewed training labels")
     return model
+

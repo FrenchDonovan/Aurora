@@ -61,3 +61,8 @@ Pass `--exclude paper-smoothquant` to reproduce removal of that source. Receipts
 This optimizes lexical coverage under a hand-designed proxy. A policy can collect overlapping words without collecting scientifically useful evidence. Reward design is exposed specifically so visitors can see that failure mode. Training and evaluation reuse one fixed environment; there is no transfer to new questions, no RLHF, no deep RL and no improvement claim for answer accuracy, faithfulness or human preferences. No RL results are written into the unmeasured research evaluation artifact.
 
 A later study could introduce independently reviewed evidence-utility rewards, query-family-disjoint training/evaluation, multiple training seeds, strong greedy/optimization baselines, reward-ablation controls and held-out removal tests. Those are future experiments, not evidence supplied by this sandbox.
+
+
+## 20 October 2026: separate real-question audit
+
+See [QASPER_STUDY.md](QASPER_STUDY.md) for the frozen 20-question, five-seed audit. It uses bounded QASPER paragraph environments and the same learner; the interactive arena here still uses the eight-excerpt seed corpus. It establishes no policy transfer or held-out RL generalization. All 100 runs reached the lexical optimum, while mean human-reference recall was only .170. References are partial; reward optimality is not semantic evidence quality.

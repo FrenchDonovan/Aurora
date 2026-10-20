@@ -1,0 +1,37 @@
+{
+  "source": "Ai2 QASPER v0.3",
+  "dataset_card_revision": "fdc9d8214fbab5dd782958601db4d678e6934a54",
+  "dataset_license": "CC-BY-4.0",
+  "license_source": "https://huggingface.co/datasets/allenai/qasper/blob/fdc9d8214fbab5dd782958601db4d678e6934a54/README.md",
+  "archives": [
+    {
+      "url": "https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-train-dev-v0.3.tgz",
+      "bytes": 10835856,
+      "sha256": "a28fdf966db827bcee3d873107d6b6669864fb7ca8fbf73a192f5e39191bdb5a",
+      "extracted": [
+        {
+          "file": "qasper-train-v0.3.json",
+          "papers": 888,
+          "sha256": "9458bfe76074a8fa8d1685af02bcc73537aa6d338ad20591dfaff1946bc88bf4"
+        },
+        {
+          "file": "qasper-dev-v0.3.json",
+          "papers": 281,
+          "sha256": "2ae7ee62a65b1c4225791c70de80c2aad4e8998cf1fd4f09a53103db4f21af93"
+        }
+      ]
+    },
+    {
+      "url": "https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-test-and-evaluator-v0.3.tgz",
+      "bytes": 3865061,
+      "sha256": "72a52a41193e2838b8074f80ac074b94f956b84886c36a61c58a7df4171bdd72",
+      "extracted": [
+        {
+          "file": "qasper-test-v0.3.json",
+          "papers": 416,
+          "sha256": "6e29ad410e6e39aa1936017fb965b30a20eb2e7751997f55b97c9d281aa884e5"
+        }
+      ]
+    }
+  ]
+}
