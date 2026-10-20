@@ -19,7 +19,7 @@ function inspect(directory) {
       inspect(target);
     } else {
       if (!allowed.has(path.extname(entry.name))) throw new Error(`Unsupported web asset: ${entry.name}`);
-      const publicStudyCorpus = path.relative(source, target).replaceAll('\\','/') === 'data/study/corpus.json';
+      const publicStudyCorpus = ['data/study/corpus.json','data/study-v2/corpus.json'].includes(path.relative(source, target).replaceAll('\\','/'));
       if (statSync(target).size > (publicStudyCorpus ? 8_000_000 : 2_000_000)) throw new Error(`Asset too large: ${entry.name}`);
       if (['.js', '.json', '.html', '.css', '.svg', '.txt'].includes(path.extname(entry.name))) {
         const text = readFileSync(target, 'utf8');
